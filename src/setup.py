@@ -17,7 +17,8 @@ setup(
   entry_points={
     "console_scripts": [
       "fetch_data=cifar_100.fetch_data:main",
-      "split=cifar_100.split:main"
+      "split=cifar_100.split:main",
+      "train_cnn=cifar_100.dl.train_cnn:main"
     ]
   }
 )

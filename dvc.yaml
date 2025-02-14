@@ -13,3 +13,14 @@ stages:
     outs:
       - data/splitted/train
       - data/splitted/validation
+  train_cnn:
+    cmd: train_cnn -v -t data/splitted/train -e data/splitted/validation -o models
+    params:
+      - train_cnn.batch_size
+      - train_cnn.epochs
+    deps:
+      - data/splitted/train
+      - data/splitted/validation
+    outs:
+      - models/cnn_model.keras
+      - models/cnn_history.npy

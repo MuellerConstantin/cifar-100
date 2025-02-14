@@ -4,7 +4,6 @@ Module for splitting the data into train and validation sets.
 
 import argparse
 import tensorflow as tf
-import keras
 import dvc.api
 
 # pylint: disable=unnecessary-lambda-assignment

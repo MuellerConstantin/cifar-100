@@ -35,3 +35,29 @@ stages:
       md5: c876b682f7b7484c9d102bd8f85da7f9.dir
       size: 31410079
       nfiles: 3
+  train_cnn:
+    cmd: train_cnn -v -t data/splitted/train -e data/splitted/validation -o models
+    deps:
+    - path: data/splitted/train
+      hash: md5
+      md5: c12ba84bdeaa252cd02d44f9993eacb7.dir
+      size: 125640081
+      nfiles: 3
+    - path: data/splitted/validation
+      hash: md5
+      md5: c876b682f7b7484c9d102bd8f85da7f9.dir
+      size: 31410079
+      nfiles: 3
+    params:
+      params.yaml:
+        train_cnn.batch_size: 32
+        train_cnn.epochs: 5
+    outs:
+    - path: models/cnn_history.npy
+      hash: md5
+      md5: 81a4a9c8089998d48b2ad2c84045cacf
+      size: 517
+    - path: models/cnn_model.keras
+      hash: md5
+      md5: cacf984b1ca0f2c6f509d76345e31f08
+      size: 24171837
