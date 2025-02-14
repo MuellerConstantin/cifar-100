@@ -1,0 +1,15 @@
+stages:
+  fetch_data:
+    cmd: fetch_data -v -o data/raw
+    outs:
+      - data/raw/train
+      - data/raw/test
+  split:
+    cmd: split -v -i data/raw/train -t data/splitted/train -e data/splitted/validation
+    params:
+      - split.validation_split_ratio
+    deps:
+      - data/raw/train
+    outs:
+      - data/splitted/train
+      - data/splitted/validation

@@ -1,0 +1,10 @@
+jupyter
+nbstripout
+ipython
+pylint
+dvc
+dvc-ssh
+numpy
+matplotlib
+keras
+tensorflow
