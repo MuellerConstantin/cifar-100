@@ -8,4 +8,6 @@ git config --local user.email "info@mueller-constantin.de"
 
 pip install -r requirements.txt
 
+pip install -e src
+
 dvc pull
