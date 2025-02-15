@@ -2,3 +2,4 @@
     remote = storagebox
 ['remote "storagebox"']
     url = ssh://u327714-sub2.your-storagebox.de
+    user = u327714-sub2
