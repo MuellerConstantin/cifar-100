@@ -51,13 +51,13 @@ stages:
     params:
       params.yaml:
         train_cnn.batch_size: 32
-        train_cnn.epochs: 5
+        train_cnn.epochs: 500
     outs:
     - path: models/cnn_history.npy
       hash: md5
-      md5: 81a4a9c8089998d48b2ad2c84045cacf
-      size: 517
+      md5: a6ed93ef392295a2190e9794c566a258
+      size: 18362
     - path: models/cnn_model.keras
       hash: md5
-      md5: cacf984b1ca0f2c6f509d76345e31f08
-      size: 24171837
+      md5: d23349479c9d9591f76b81ae4213f72d
+      size: 24164189
