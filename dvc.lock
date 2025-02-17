@@ -61,3 +61,29 @@ stages:
       hash: md5
       md5: d23349479c9d9591f76b81ae4213f72d
       size: 24164189
+  evaluate_cnn:
+    cmd: evaluate -v -m models/cnn_model.keras -t data/splitted/train -e data/raw/test
+    deps:
+    - path: data/raw/test
+      hash: md5
+      md5: bcb568ecea6ef3e3c8e8169fae085cf6.dir
+      size: 31410079
+      nfiles: 3
+    - path: data/splitted/train
+      hash: md5
+      md5: c12ba84bdeaa252cd02d44f9993eacb7.dir
+      size: 125640081
+      nfiles: 3
+    - path: models/cnn_model.keras
+      hash: md5
+      md5: d23349479c9d9591f76b81ae4213f72d
+      size: 24164189
+    params:
+      params.yaml:
+        evaluate_cnn.batch_size: 32
+    outs:
+    - path: dvclive
+      hash: md5
+      md5: 2d9750447ffdc913e104209c1b2f3784.dir
+      size: 257
+      nfiles: 3

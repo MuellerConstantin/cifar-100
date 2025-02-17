@@ -18,7 +18,8 @@ setup(
     "console_scripts": [
       "fetch_data=cifar_100.fetch_data:main",
       "split=cifar_100.split:main",
-      "train_cnn=cifar_100.dl.train_cnn:main"
+      "train_cnn=cifar_100.dl.train_cnn:main",
+      "evaluate=cifar_100.evaluate:main"
     ]
   }
 )

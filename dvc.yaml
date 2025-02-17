@@ -2,25 +2,40 @@ stages:
   fetch_data:
     cmd: fetch_data -v -o data/raw
     outs:
-      - data/raw/train
-      - data/raw/test
+    - data/raw/train
+    - data/raw/test
   split:
     cmd: split -v -i data/raw/train -t data/splitted/train -e data/splitted/validation
     params:
-      - split.validation_split_ratio
+    - split.validation_split_ratio
     deps:
-      - data/raw/train
+    - data/raw/train
     outs:
-      - data/splitted/train
-      - data/splitted/validation
+    - data/splitted/train
+    - data/splitted/validation
   train_cnn:
     cmd: train_cnn -v -t data/splitted/train -e data/splitted/validation -o models
     params:
-      - train_cnn.batch_size
-      - train_cnn.epochs
+    - train_cnn.batch_size
+    - train_cnn.epochs
     deps:
-      - data/splitted/train
-      - data/splitted/validation
+    - data/splitted/train
+    - data/splitted/validation
     outs:
-      - models/cnn_model.keras
-      - models/cnn_history.npy
+    - models/cnn_model.keras
+    - models/cnn_history.npy
+  evaluate_cnn:
+    cmd: evaluate -v -m models/cnn_model.keras -t data/splitted/train -e data/raw/test
+    params:
+    - evaluate_cnn.batch_size
+    deps:
+    - models/cnn_model.keras
+    - data/splitted/train
+    - data/raw/test
+    outs:
+    - dvclive
+metrics:
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step

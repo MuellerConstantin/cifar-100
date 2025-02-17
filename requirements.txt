@@ -4,6 +4,7 @@ ipython
 pylint
 dvc
 dvc-ssh
+dvclive
 numpy
 matplotlib
 keras==3.2.0

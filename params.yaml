@@ -3,3 +3,5 @@ split:
 train_cnn:
   batch_size: 32
   epochs: 500
+evaluate_cnn:
+  batch_size: 32
