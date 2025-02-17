@@ -40,14 +40,14 @@ def create_model():
 
 def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Dataset):
     """
-    Trains the neural network regression model.
+    Trains the deep learning model.
     """
 
-    vprint("Building model ...")
+    vprint("Building model...")
 
     model = create_model()
 
-    vprint("Training model ...")
+    vprint("Training model...")
 
     params = dvc.api.params_show()
     epochs = params["train_cnn"]["epochs"]
@@ -79,7 +79,7 @@ def main():
     params = dvc.api.params_show()
     batch_size = params["train_cnn"]["batch_size"]
 
-    vprint("Loading training and validation data from...")
+    vprint("Loading training and validation data...")
 
     train_dataset = (tf.data.Dataset.load(args.train)
                      .batch(batch_size)

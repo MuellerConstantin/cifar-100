@@ -33,9 +33,9 @@ stages:
     - data/splitted/train
     - data/raw/test
     outs:
-    - dvclive
+    - dvclive/cnn_model
 metrics:
-- dvclive/metrics.json
+- dvclive/cnn_model/metrics.json
 plots:
-- dvclive/plots/metrics:
+- dvclive/cnn_model/plots/metrics:
     x: step

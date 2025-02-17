@@ -16,14 +16,14 @@ def evaluate(model_name: str, model: keras.Sequential, train_dataset: tf.data.Da
     """
     Evaluates a trained model.
     """
-    vprint("Evaluating model ...")
+    vprint("Evaluating model...")
 
     train_accuracy = model.evaluate(train_dataset, verbose=2)
     test_accuracy = model.evaluate(test_dataset, verbose=2)
 
-    with dvclive.Live() as live:
-        live.log_metric(f"{model_name}/train/accuracy", train_accuracy[1])
-        live.log_metric(f"{model_name}/test/accuracy", test_accuracy[1])
+    with dvclive.Live(f"dvclive/{model_name}") as live:
+        live.log_metric("train/accuracy", train_accuracy[1])
+        live.log_metric("test/accuracy", test_accuracy[1])
 
 def main():
     """
@@ -48,7 +48,7 @@ def main():
         global vprint
         vprint = print
 
-    vprint(f"Loading model from '{args.model}' ...")
+    vprint(f"Loading model from '{args.model}'...")
 
     params = dvc.api.params_show()
     batch_size = params["evaluate_cnn"]["batch_size"]

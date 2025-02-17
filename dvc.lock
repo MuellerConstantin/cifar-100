@@ -82,8 +82,8 @@ stages:
       params.yaml:
         evaluate_cnn.batch_size: 32
     outs:
-    - path: dvclive
+    - path: dvclive/cnn_model
       hash: md5
-      md5: 2d9750447ffdc913e104209c1b2f3784.dir
-      size: 257
+      md5: 98c3e37ca597d757f6a0c5c7b4425ee2.dir
+      size: 206
       nfiles: 3

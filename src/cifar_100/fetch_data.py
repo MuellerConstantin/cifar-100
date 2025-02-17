@@ -14,7 +14,7 @@ def fetch():
     """
     Download data via keras datasets.
     """
-    vprint("Downloading data ...")
+    vprint("Downloading data...")
 
     (train_images, train_labels), (test_images, test_labels) = keras.datasets.cifar100.load_data(
         label_mode="fine")
@@ -47,7 +47,7 @@ def main():
 
     train_dataset, test_dataset = fetch()
 
-    vprint(f"Saving data to '{args.output}' ...")
+    vprint(f"Saving data to '{args.output}'...")
 
     os.makedirs(args.output, exist_ok=True)
 

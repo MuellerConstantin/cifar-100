@@ -13,7 +13,7 @@ def split(full_dataset: tf.data.Dataset):
     """
     Splits the training data into train and validation sets.
     """
-    vprint("Splitting data ...")
+    vprint("Splitting data...")
 
     params = dvc.api.params_show()
     validation_split_ratio = params["split"]["validation_split_ratio"]
@@ -49,7 +49,7 @@ def main():
         global vprint
         vprint = print
 
-    vprint(f"Loading data from '{args.input}' ...")
+    vprint(f"Loading data from '{args.input}'...")
 
     full_dataset = tf.data.Dataset.load(args.input)
     train_dataset, validation_dataset = split(full_dataset)
