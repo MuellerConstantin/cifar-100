@@ -20,7 +20,7 @@ def evaluate(model, train_dataset: tf.data.Dataset, test_dataset: tf.data.Datase
     train_accuracy = model.evaluate(train_dataset, verbose=2)
     test_accuracy = model.evaluate(test_dataset, verbose=2)
 
-    with dvclive.Live("dvclive/cnn") as live:
+    with dvclive.Live("dvclive/cnn/evaluation") as live:
         live.log_metric("train/accuracy", train_accuracy[1])
         live.log_metric("test/accuracy", test_accuracy[1])
 

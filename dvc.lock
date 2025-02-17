@@ -5,21 +5,21 @@ stages:
     outs:
     - path: data/raw/test
       hash: md5
-      md5: bcb568ecea6ef3e3c8e8169fae085cf6.dir
-      size: 31410079
+      md5: b1162132f4ffebe1f492bf90048a2a6e.dir
+      size: 31370078
       nfiles: 3
     - path: data/raw/train
       hash: md5
-      md5: be42a485d0164c545e5e71c93e043ebf.dir
-      size: 157050080
+      md5: e17db322e296fbafcf3911b55c1a601b.dir
+      size: 156850079
       nfiles: 3
   split:
     cmd: split -v -i data/raw/train -t data/splitted/train -e data/splitted/validation
     deps:
     - path: data/raw/train
       hash: md5
-      md5: be42a485d0164c545e5e71c93e043ebf.dir
-      size: 157050080
+      md5: e17db322e296fbafcf3911b55c1a601b.dir
+      size: 156850079
       nfiles: 3
     params:
       params.yaml:
@@ -27,63 +27,68 @@ stages:
     outs:
     - path: data/splitted/train
       hash: md5
-      md5: 369ff03a4524bd68a11007a8f5a19431.dir
-      size: 125640080
+      md5: 5ab46e99601e1ed4ac88ddd8293f6b4e.dir
+      size: 125480081
       nfiles: 3
     - path: data/splitted/validation
       hash: md5
-      md5: 8e5d1c98a2a3eeabaae857a363d23bcb.dir
-      size: 31410079
+      md5: 351109d20e5bc268fbf4bcd77439f81a.dir
+      size: 31370079
       nfiles: 3
   train_cnn:
     cmd: train_cnn -v -t data/splitted/train -e data/splitted/validation -o models
     deps:
     - path: data/splitted/train
       hash: md5
-      md5: 369ff03a4524bd68a11007a8f5a19431.dir
-      size: 125640080
+      md5: 5ab46e99601e1ed4ac88ddd8293f6b4e.dir
+      size: 125480081
       nfiles: 3
     - path: data/splitted/validation
       hash: md5
-      md5: 8e5d1c98a2a3eeabaae857a363d23bcb.dir
-      size: 31410079
+      md5: 351109d20e5bc268fbf4bcd77439f81a.dir
+      size: 31370079
       nfiles: 3
     params:
       params.yaml:
         general.batch_size: 32
-        train_cnn.epochs: 10
+        train_cnn.epochs: 5
     outs:
+    - path: dvclive/cnn/training
+      hash: md5
+      md5: dcf0cebefc5e41d862e6e598f6b8407d.dir
+      size: 718
+      nfiles: 5
     - path: models/cnn_history.npy
       hash: md5
-      md5: ea75d0d8ad296e4800accc38b2256b13
-      size: 722
+      md5: 2fe8cfdced1c43f3c7263342836d59aa
+      size: 542
     - path: models/cnn_model.keras
       hash: md5
-      md5: face24aa19a32600e194d0a145d0392f
+      md5: 62670a284dadbfb7484712cea89bd9e6
       size: 24164189
   evaluate_cnn:
     cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/splitted/train -e data/raw/test
     deps:
     - path: data/raw/test
       hash: md5
-      md5: bcb568ecea6ef3e3c8e8169fae085cf6.dir
-      size: 31410079
+      md5: b1162132f4ffebe1f492bf90048a2a6e.dir
+      size: 31370078
       nfiles: 3
     - path: data/splitted/train
       hash: md5
-      md5: 369ff03a4524bd68a11007a8f5a19431.dir
-      size: 125640080
+      md5: 5ab46e99601e1ed4ac88ddd8293f6b4e.dir
+      size: 125480081
       nfiles: 3
     - path: models/cnn_model.keras
       hash: md5
-      md5: face24aa19a32600e194d0a145d0392f
+      md5: 62670a284dadbfb7484712cea89bd9e6
       size: 24164189
     params:
       params.yaml:
         general.batch_size: 32
     outs:
-    - path: dvclive/cnn
+    - path: dvclive/cnn/evaluation
       hash: md5
-      md5: c6564d108554e042b8623ffe495e8d11.dir
+      md5: 45d0e9f3dfc5063b1bddfbe570612ed1.dir
       size: 210
       nfiles: 3

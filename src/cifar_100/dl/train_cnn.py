@@ -8,6 +8,8 @@ import numpy as np
 import tensorflow as tf
 import keras
 import dvc.api
+from dvclive.keras import DVCLiveCallback
+import dvclive
 
 # pylint: disable=unnecessary-lambda-assignment
 vprint = lambda *a, **k: None
@@ -16,6 +18,8 @@ def create_model():
     """
     Creates the deep learning model.
     """
+    vprint("Building model...")
+
     model = keras.Sequential([
         keras.layers.Input(shape=((32, 32, 3))),
         keras.layers.Rescaling(1./255),
@@ -42,17 +46,18 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
     """
     Trains the deep learning model.
     """
-
-    vprint("Building model...")
-
     model = create_model()
-
-    vprint("Training model...")
 
     params = dvc.api.params_show()
     epochs = params["train_cnn"]["epochs"]
 
-    history = model.fit(train_dataset, epochs=epochs, validation_data=validation_dataset)
+    vprint(f"Training model for {epochs} epochs...")
+
+    with dvclive.Live("dvclive/cnn/training") as live:
+        history = model.fit(train_dataset,
+                            epochs=epochs,
+                            validation_data=validation_dataset,
+                            callbacks=[DVCLiveCallback(live=live)])
 
     return model, history
 

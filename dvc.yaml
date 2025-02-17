@@ -24,6 +24,7 @@ stages:
     outs:
     - models/cnn_model.keras
     - models/cnn_history.npy
+    - dvclive/cnn/training
   evaluate_cnn:
     cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/splitted/train -e data/raw/test
     params:
@@ -33,12 +34,12 @@ stages:
     - data/splitted/train
     - data/raw/test
     outs:
-    - dvclive/cnn
+    - dvclive/cnn/evaluation
 metrics:
-- dvclive/cnn/metrics.json
-- dvclive/cnn/metrics.json
+- dvclive/cnn/evaluation/metrics.json
+- dvclive/cnn/training/metrics.json
 plots:
-- dvclive/cnn/plots/metrics:
+- dvclive/cnn/evaluation/plots/metrics:
     x: step
-- dvclive/cnn/plots/metrics:
+- dvclive/cnn/training/plots/metrics:
     x: step
