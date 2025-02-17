@@ -77,7 +77,7 @@ def main():
         vprint = print
 
     params = dvc.api.params_show()
-    batch_size = params["train_cnn"]["batch_size"]
+    batch_size = params["general"]["batch_size"]
 
     vprint("Loading training and validation data...")
 

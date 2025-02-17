@@ -1,8 +1,7 @@
 """
-Module for evaluating a trained model.
+Module for evaluating a trained convolutional neural network model.
 """
 
-import os
 import argparse
 import tensorflow as tf
 import keras
@@ -12,7 +11,7 @@ import dvclive
 # pylint: disable=unnecessary-lambda-assignment
 vprint = lambda *a, **k: None
 
-def evaluate(model_name: str, model: keras.Sequential, train_dataset: tf.data.Dataset, test_dataset: tf.data.Dataset):
+def evaluate(model, train_dataset: tf.data.Dataset, test_dataset: tf.data.Dataset):
     """
     Evaluates a trained model.
     """
@@ -21,7 +20,7 @@ def evaluate(model_name: str, model: keras.Sequential, train_dataset: tf.data.Da
     train_accuracy = model.evaluate(train_dataset, verbose=2)
     test_accuracy = model.evaluate(test_dataset, verbose=2)
 
-    with dvclive.Live(f"dvclive/{model_name}") as live:
+    with dvclive.Live("dvclive/cnn") as live:
         live.log_metric("train/accuracy", train_accuracy[1])
         live.log_metric("test/accuracy", test_accuracy[1])
 
@@ -29,9 +28,9 @@ def main():
     """
     Entry point for evaluating a trained model.
     """
-    parser = argparse.ArgumentParser(prog="evaluate.py",
+    parser = argparse.ArgumentParser(prog="evaluate_cnn.py",
                                     formatter_class=argparse.RawTextHelpFormatter,
-                                    description="Evaluate a trained model.")
+                                    description="Evaluate a trained convolutional neural network model.")
 
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Print out verbose messages.")
@@ -51,9 +50,8 @@ def main():
     vprint(f"Loading model from '{args.model}'...")
 
     params = dvc.api.params_show()
-    batch_size = params["evaluate_cnn"]["batch_size"]
+    batch_size = params["general"]["batch_size"]
 
-    model_name = os.path.splitext(os.path.basename(args.model))[0]
     model = keras.saving.load_model(args.model)
 
     train_dataset = (tf.data.Dataset.load(args.train)
@@ -64,7 +62,7 @@ def main():
         .batch(batch_size)
         .prefetch(tf.data.AUTOTUNE))
 
-    evaluate(model_name, model, train_dataset, test_dataset)
+    evaluate(model, train_dataset, test_dataset)
 
     vprint("Done.")
 

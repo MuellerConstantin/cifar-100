@@ -16,7 +16,7 @@ def split(full_dataset: tf.data.Dataset):
     vprint("Splitting data...")
 
     params = dvc.api.params_show()
-    validation_split_ratio = params["split"]["validation_split_ratio"]
+    validation_split_ratio = params["general"]["validation_split_ratio"]
 
     total_size = full_dataset.cardinality().numpy()
     validation_size = int(validation_split_ratio * total_size)

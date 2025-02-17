@@ -23,16 +23,16 @@ stages:
       nfiles: 3
     params:
       params.yaml:
-        split.validation_split_ratio: 0.2
+        general.validation_split_ratio: 0.2
     outs:
     - path: data/splitted/train
       hash: md5
-      md5: c12ba84bdeaa252cd02d44f9993eacb7.dir
-      size: 125640081
+      md5: 369ff03a4524bd68a11007a8f5a19431.dir
+      size: 125640080
       nfiles: 3
     - path: data/splitted/validation
       hash: md5
-      md5: c876b682f7b7484c9d102bd8f85da7f9.dir
+      md5: 8e5d1c98a2a3eeabaae857a363d23bcb.dir
       size: 31410079
       nfiles: 3
   train_cnn:
@@ -40,29 +40,29 @@ stages:
     deps:
     - path: data/splitted/train
       hash: md5
-      md5: c12ba84bdeaa252cd02d44f9993eacb7.dir
-      size: 125640081
+      md5: 369ff03a4524bd68a11007a8f5a19431.dir
+      size: 125640080
       nfiles: 3
     - path: data/splitted/validation
       hash: md5
-      md5: c876b682f7b7484c9d102bd8f85da7f9.dir
+      md5: 8e5d1c98a2a3eeabaae857a363d23bcb.dir
       size: 31410079
       nfiles: 3
     params:
       params.yaml:
-        train_cnn.batch_size: 32
-        train_cnn.epochs: 500
+        general.batch_size: 32
+        train_cnn.epochs: 10
     outs:
     - path: models/cnn_history.npy
       hash: md5
-      md5: a6ed93ef392295a2190e9794c566a258
-      size: 18362
+      md5: ea75d0d8ad296e4800accc38b2256b13
+      size: 722
     - path: models/cnn_model.keras
       hash: md5
-      md5: d23349479c9d9591f76b81ae4213f72d
+      md5: face24aa19a32600e194d0a145d0392f
       size: 24164189
   evaluate_cnn:
-    cmd: evaluate -v -m models/cnn_model.keras -t data/splitted/train -e data/raw/test
+    cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/splitted/train -e data/raw/test
     deps:
     - path: data/raw/test
       hash: md5
@@ -71,19 +71,19 @@ stages:
       nfiles: 3
     - path: data/splitted/train
       hash: md5
-      md5: c12ba84bdeaa252cd02d44f9993eacb7.dir
-      size: 125640081
+      md5: 369ff03a4524bd68a11007a8f5a19431.dir
+      size: 125640080
       nfiles: 3
     - path: models/cnn_model.keras
       hash: md5
-      md5: d23349479c9d9591f76b81ae4213f72d
+      md5: face24aa19a32600e194d0a145d0392f
       size: 24164189
     params:
       params.yaml:
-        evaluate_cnn.batch_size: 32
+        general.batch_size: 32
     outs:
-    - path: dvclive/cnn_model
+    - path: dvclive/cnn
       hash: md5
-      md5: 98c3e37ca597d757f6a0c5c7b4425ee2.dir
-      size: 206
+      md5: c6564d108554e042b8623ffe495e8d11.dir
+      size: 210
       nfiles: 3

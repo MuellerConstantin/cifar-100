@@ -11,15 +11,17 @@ setup(
   install_requires=[
     "numpy",
     "tqdm",
-    "keras",
-    "tensorflow"
+    "keras==3.2.0",
+    "tensorflow==2.16.1",
+    "dvc",
+    "dvclive"
   ],
   entry_points={
     "console_scripts": [
       "fetch_data=cifar_100.fetch_data:main",
       "split=cifar_100.split:main",
       "train_cnn=cifar_100.dl.train_cnn:main",
-      "evaluate=cifar_100.evaluate:main"
+      "evaluate_cnn=cifar_100.dl.evaluate_cnn:main"
     ]
   }
 )
