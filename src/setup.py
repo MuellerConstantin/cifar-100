@@ -11,7 +11,7 @@ setup(
   install_requires=[
     "numpy",
     "tqdm",
-    "keras==3.2.0",
+    "keras==3.5.0",
     "tensorflow==2.16.1",
     "dvc",
     "dvclive"
