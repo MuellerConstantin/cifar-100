@@ -38,6 +38,7 @@ stages:
     params:
     - general.batch_size
     - train_cnn.epochs
+    - train_cnn.learning_rate
     deps:
     - data/preprocessed/train/cnn
     - data/preprocessed/validation/cnn
@@ -57,15 +58,9 @@ stages:
     outs:
     - dvclive/cnn/evaluation
 metrics:
-- dvclive/cnn/evaluation/metrics.json
-- dvclive/cnn/evaluation/metrics.json
 - dvclive/cnn/training/metrics.json
 - dvclive/cnn/evaluation/metrics.json
 plots:
-- dvclive/cnn/evaluation/plots/metrics:
-    x: step
-- dvclive/cnn/evaluation/plots/metrics:
-    x: step
 - dvclive/cnn/training/plots/metrics:
     x: step
 - dvclive/cnn/evaluation/plots/metrics:
