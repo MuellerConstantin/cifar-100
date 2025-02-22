@@ -4,3 +4,4 @@ general:
   validation_split_ratio: 0.2
 train_cnn:
   epochs: 200
+  learning_rate: 0.0005

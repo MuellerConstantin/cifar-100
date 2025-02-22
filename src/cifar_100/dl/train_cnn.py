@@ -22,13 +22,28 @@ def create_model():
 
     model = keras.Sequential([
         keras.layers.Input(shape=((32, 32, 3))),
+
         keras.layers.RandomFlip("horizontal"),
         keras.layers.RandomRotation(0.2),
-        keras.layers.Conv2D(filters=128, kernel_size=(3,3), activation="relu"),
+
+        keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu"),
+        keras.layers.BatchNormalization(),
+        keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu"),
+        keras.layers.BatchNormalization(),
         keras.layers.MaxPooling2D((2, 2)),
-        keras.layers.Conv2D(filters=256, kernel_size=(3, 3), activation="relu"),
+
+        keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu"),
+        keras.layers.BatchNormalization(),
+        keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu"),
+        keras.layers.BatchNormalization(),
         keras.layers.MaxPooling2D((2, 2)),
-        keras.layers.Conv2D(filters=512, kernel_size=(3, 3), activation="relu"),
+
+        keras.layers.Conv2D(256, (3, 3), padding="same", activation="relu"),
+        keras.layers.BatchNormalization(),
+        keras.layers.Conv2D(256, (3, 3), padding="same", activation="relu"),
+        keras.layers.BatchNormalization(),
+        keras.layers.MaxPooling2D((2, 2)),
+
         keras.layers.Flatten(),
         keras.layers.Dropout(0.2),
         keras.layers.Dense(64, activation="relu"),
@@ -36,7 +51,10 @@ def create_model():
         keras.layers.Dense(100, activation="softmax")
     ])
 
-    model.compile(optimizer="adam",
+    params = dvc.api.params_show()
+    learning_rate = params["train_cnn"]["learning_rate"]
+
+    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
                   loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
     return model
@@ -52,10 +70,18 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
 
     vprint(f"Training model for {epochs} epochs...")
 
-    early_stopping_callback = tf.keras.callbacks.EarlyStopping(
+    early_stopping_callback = keras.callbacks.EarlyStopping(
         monitor="val_loss",
         patience=5,
         restore_best_weights=True
+    )
+
+    reduce_lr_callback = keras.callbacks.ReduceLROnPlateau(
+        monitor="val_loss",
+        factor=0.5,
+        patience=3,
+        min_lr=1e-6,
+        verbose=1
     )
 
     with dvclive.Live("dvclive/cnn/training") as live:
@@ -64,7 +90,7 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
         history = model.fit(train_dataset,
                             epochs=epochs,
                             validation_data=validation_dataset,
-                            callbacks=[dvclive_callback, early_stopping_callback])
+                            callbacks=[dvclive_callback, early_stopping_callback, reduce_lr_callback])
 
     return model, history
 
