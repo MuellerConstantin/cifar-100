@@ -53,20 +53,20 @@ stages:
     params:
       params.yaml:
         general.batch_size: 32
-        train_cnn.epochs: 5
+        train_cnn.epochs: 200
     outs:
     - path: dvclive/cnn/training
       hash: md5
-      md5: 6a3f28b45b490fd766991c9c779069b4.dir
-      size: 715
+      md5: afb2a73efd0a864ce63a2daa37a735a7.dir
+      size: 5338
       nfiles: 5
     - path: models/cnn_history.npy
       hash: md5
-      md5: b15ec4e3be44b6c2fd04c25670df5db4
-      size: 542
+      md5: 4141665d6728b7eef8e3a78c24e185dc
+      size: 2450
     - path: models/cnn_model.keras
       hash: md5
-      md5: a3b12206370598752fc0e7184ed3fecf
+      md5: 8431371eab9075a235fc3ce1c3ef7055
       size: 24161684
   evaluate_cnn:
     cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/preprocessed/train/cnn

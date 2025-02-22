@@ -58,30 +58,12 @@ stages:
     - dvclive/cnn/evaluation
 metrics:
 - dvclive/cnn/evaluation/metrics.json
-- dvclive/cnn/training/metrics.json
-- dvclive/cnn/training/metrics.json
-- dvclive/cnn/training/metrics.json
-- dvclive/cnn/training/metrics.json
-- dvclive/cnn/training/metrics.json
-- dvclive/cnn/training/metrics.json
-- dvclive/cnn/training/metrics.json
 - dvclive/cnn/evaluation/metrics.json
+- dvclive/cnn/training/metrics.json
 plots:
 - dvclive/cnn/evaluation/plots/metrics:
     x: step
-- dvclive/cnn/training/plots/metrics:
-    x: step
-- dvclive/cnn/training/plots/metrics:
-    x: step
-- dvclive/cnn/training/plots/metrics:
-    x: step
-- dvclive/cnn/training/plots/metrics:
-    x: step
-- dvclive/cnn/training/plots/metrics:
-    x: step
-- dvclive/cnn/training/plots/metrics:
-    x: step
-- dvclive/cnn/training/plots/metrics:
-    x: step
 - dvclive/cnn/evaluation/plots/metrics:
+    x: step
+- dvclive/cnn/training/plots/metrics:
     x: step
