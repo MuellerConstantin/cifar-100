@@ -84,7 +84,7 @@ stages:
       nfiles: 3
     - path: models/cnn_model.keras
       hash: md5
-      md5: a3b12206370598752fc0e7184ed3fecf
+      md5: 8431371eab9075a235fc3ce1c3ef7055
       size: 24161684
     params:
       params.yaml:
@@ -92,8 +92,8 @@ stages:
     outs:
     - path: dvclive/cnn/evaluation
       hash: md5
-      md5: cfbc9d00da80b870a2ee78c4fde9a00e.dir
-      size: 208
+      md5: 94f314cef552a98094a2fc21a3f87979.dir
+      size: 206
       nfiles: 3
   preprocess_cnn_train:
     cmd: preprocess_cnn -v -i data/splitted/train -o data/preprocessed/train/cnn
