@@ -52,11 +52,17 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
 
     vprint(f"Training model for {epochs} epochs...")
 
+    early_stopping = tf.keras.callbacks.EarlyStopping(
+        monitor="val_loss",
+        patience=5,
+        restore_best_weights=True
+    )
+
     with dvclive.Live("dvclive/cnn/training") as live:
         history = model.fit(train_dataset,
                             epochs=epochs,
                             validation_data=validation_dataset,
-                            callbacks=[DVCLiveCallback(live=live)])
+                            callbacks=[DVCLiveCallback(live=live), early_stopping])
 
     return model, history
 
