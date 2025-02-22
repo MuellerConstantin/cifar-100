@@ -13,26 +13,46 @@ stages:
     outs:
     - data/splitted/train
     - data/splitted/validation
+  preprocess_cnn_train:
+    cmd: preprocess_cnn -v -i data/splitted/train -o data/preprocessed/train/cnn
+    deps:
+    - data/splitted/train
+    outs:
+    - data/preprocessed/train/cnn
+  preprocess_cnn_test:
+    cmd: preprocess_cnn -v -i data/raw/test -o data/preprocessed/test/cnn
+    deps:
+    - data/raw/test
+    outs:
+    - data/preprocessed/test/cnn
+  preprocess_cnn_validation:
+    cmd: preprocess_cnn -v -i data/splitted/validation -o data/preprocessed/validation/cnn
+    deps:
+    - data/splitted/validation
+    outs:
+    - data/preprocessed/validation/cnn
   train_cnn:
-    cmd: train_cnn -v -t data/splitted/train -e data/splitted/validation -o models
+    cmd: train_cnn -v -t data/preprocessed/train/cnn -e data/preprocessed/validation/cnn
+      -o models
     params:
     - general.batch_size
     - train_cnn.epochs
     deps:
-    - data/splitted/train
-    - data/splitted/validation
+    - data/preprocessed/train/cnn
+    - data/preprocessed/validation/cnn
     outs:
     - models/cnn_model.keras
     - models/cnn_history.npy
     - dvclive/cnn/training
   evaluate_cnn:
-    cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/splitted/train -e data/raw/test
+    cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/preprocessed/train/cnn
+      -e data/preprocessed/test/cnn
     params:
     - general.batch_size
     deps:
     - models/cnn_model.keras
-    - data/splitted/train
-    - data/raw/test
+    - data/preprocessed/train/cnn
+    - data/preprocessed/test/cnn
     outs:
     - dvclive/cnn/evaluation
 metrics:

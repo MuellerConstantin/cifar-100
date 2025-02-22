@@ -1,5 +1,5 @@
 """
-Module for training a simple neural network regression model.
+Module for training a simple convolutional neural network model.
 """
 
 import os
@@ -22,7 +22,6 @@ def create_model():
 
     model = keras.Sequential([
         keras.layers.Input(shape=((32, 32, 3))),
-        keras.layers.Rescaling(1./255),
         keras.layers.RandomFlip("horizontal"),
         keras.layers.RandomRotation(0.2),
         keras.layers.Conv2D(filters=128, kernel_size=(3,3), activation="relu"),

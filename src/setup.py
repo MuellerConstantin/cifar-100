@@ -20,6 +20,7 @@ setup(
     "console_scripts": [
       "fetch_data=cifar_100.fetch_data:main",
       "split=cifar_100.split:main",
+      "preprocess_cnn=cifar_100.dl.preprocess_cnn:main",
       "train_cnn=cifar_100.dl.train_cnn:main",
       "evaluate_cnn=cifar_100.dl.evaluate_cnn:main"
     ]

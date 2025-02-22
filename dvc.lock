@@ -36,17 +36,18 @@ stages:
       size: 31370079
       nfiles: 3
   train_cnn:
-    cmd: train_cnn -v -t data/splitted/train -e data/splitted/validation -o models
+    cmd: train_cnn -v -t data/preprocessed/train/cnn -e data/preprocessed/validation/cnn
+      -o models
     deps:
-    - path: data/splitted/train
+    - path: data/preprocessed/train/cnn
       hash: md5
-      md5: 5ab46e99601e1ed4ac88ddd8293f6b4e.dir
-      size: 125480081
+      md5: b145449590566203c58401e002582a86.dir
+      size: 494120080
       nfiles: 3
-    - path: data/splitted/validation
+    - path: data/preprocessed/validation/cnn
       hash: md5
-      md5: 351109d20e5bc268fbf4bcd77439f81a.dir
-      size: 31370079
+      md5: d97ea04dffb66da0c567336e613ba0ef.dir
+      size: 123530080
       nfiles: 3
     params:
       params.yaml:
@@ -55,40 +56,83 @@ stages:
     outs:
     - path: dvclive/cnn/training
       hash: md5
-      md5: dcf0cebefc5e41d862e6e598f6b8407d.dir
-      size: 718
+      md5: 7c87dfde018c0af9541bd660a238af5d.dir
+      size: 713
       nfiles: 5
     - path: models/cnn_history.npy
       hash: md5
-      md5: 2fe8cfdced1c43f3c7263342836d59aa
+      md5: 336b2bb518c97fd242a1a727a8be1a66
       size: 542
     - path: models/cnn_model.keras
       hash: md5
-      md5: 62670a284dadbfb7484712cea89bd9e6
-      size: 24164189
+      md5: 08b52ea92373f1e0ddfe9940c501ca32
+      size: 24161684
   evaluate_cnn:
-    cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/splitted/train -e data/raw/test
+    cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/preprocessed/train/cnn
+      -e data/preprocessed/test/cnn
     deps:
-    - path: data/raw/test
+    - path: data/preprocessed/test/cnn
       hash: md5
-      md5: b1162132f4ffebe1f492bf90048a2a6e.dir
-      size: 31370078
+      md5: 35f1c2d69df7e4f8547d2ebc1a13c1d6.dir
+      size: 123530080
       nfiles: 3
-    - path: data/splitted/train
+    - path: data/preprocessed/train/cnn
       hash: md5
-      md5: 5ab46e99601e1ed4ac88ddd8293f6b4e.dir
-      size: 125480081
+      md5: b145449590566203c58401e002582a86.dir
+      size: 494120080
       nfiles: 3
     - path: models/cnn_model.keras
       hash: md5
-      md5: 62670a284dadbfb7484712cea89bd9e6
-      size: 24164189
+      md5: 08b52ea92373f1e0ddfe9940c501ca32
+      size: 24161684
     params:
       params.yaml:
         general.batch_size: 32
     outs:
     - path: dvclive/cnn/evaluation
       hash: md5
-      md5: 45d0e9f3dfc5063b1bddfbe570612ed1.dir
+      md5: 06f0835bf2d193fcb7fee5f234054b24.dir
       size: 210
+      nfiles: 3
+  preprocess_cnn_train:
+    cmd: preprocess_cnn -v -i data/splitted/train -o data/preprocessed/train/cnn
+    deps:
+    - path: data/splitted/train
+      hash: md5
+      md5: 5ab46e99601e1ed4ac88ddd8293f6b4e.dir
+      size: 125480081
+      nfiles: 3
+    outs:
+    - path: data/preprocessed/train/cnn
+      hash: md5
+      md5: b145449590566203c58401e002582a86.dir
+      size: 494120080
+      nfiles: 3
+  preprocess_cnn_test:
+    cmd: preprocess_cnn -v -i data/raw/test -o data/preprocessed/test/cnn
+    deps:
+    - path: data/raw/test
+      hash: md5
+      md5: b1162132f4ffebe1f492bf90048a2a6e.dir
+      size: 31370078
+      nfiles: 3
+    outs:
+    - path: data/preprocessed/test/cnn
+      hash: md5
+      md5: 35f1c2d69df7e4f8547d2ebc1a13c1d6.dir
+      size: 123530080
+      nfiles: 3
+  preprocess_cnn_validation:
+    cmd: preprocess_cnn -v -i data/splitted/validation -o data/preprocessed/validation/cnn
+    deps:
+    - path: data/splitted/validation
+      hash: md5
+      md5: 351109d20e5bc268fbf4bcd77439f81a.dir
+      size: 31370079
+      nfiles: 3
+    outs:
+    - path: data/preprocessed/validation/cnn
+      hash: md5
+      md5: d97ea04dffb66da0c567336e613ba0ef.dir
+      size: 123530080
       nfiles: 3
