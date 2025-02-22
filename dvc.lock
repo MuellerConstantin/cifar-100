@@ -23,17 +23,18 @@ stages:
       nfiles: 3
     params:
       params.yaml:
+        general.seed: 42
         general.validation_split_ratio: 0.2
     outs:
     - path: data/splitted/train
       hash: md5
-      md5: 2646d230dcd007e5b4f669a1269364d6.dir
+      md5: 37c77b41c3911fc24c0f8ce652fcfdac.dir
       size: 125480081
       nfiles: 3
     - path: data/splitted/validation
       hash: md5
-      md5: 3918c3ae590f5570dfde888e6db8696b.dir
-      size: 31370079
+      md5: 00e02e358e29588799d462ac59f67512.dir
+      size: 31370080
       nfiles: 3
   train_cnn:
     cmd: train_cnn -v -t data/preprocessed/train/cnn -e data/preprocessed/validation/cnn
@@ -41,12 +42,12 @@ stages:
     deps:
     - path: data/preprocessed/train/cnn
       hash: md5
-      md5: 951fdf27583db4cf9d0a9ee98d35fa22.dir
-      size: 494120079
+      md5: f29f4b5a71c3b800611f997b4307c7a3.dir
+      size: 494120081
       nfiles: 3
     - path: data/preprocessed/validation/cnn
       hash: md5
-      md5: be3917a7b33ad329399348e064ad8801.dir
+      md5: 8d20db777349b99562652eef5355483f.dir
       size: 123530080
       nfiles: 3
     params:
@@ -56,16 +57,16 @@ stages:
     outs:
     - path: dvclive/cnn/training
       hash: md5
-      md5: ecd740cdc05a3eb3ddeefc84083a1408.dir
-      size: 717
+      md5: 6a3f28b45b490fd766991c9c779069b4.dir
+      size: 715
       nfiles: 5
     - path: models/cnn_history.npy
       hash: md5
-      md5: caa6cd6de7cafcf6f5f9c3407688a249
+      md5: b15ec4e3be44b6c2fd04c25670df5db4
       size: 542
     - path: models/cnn_model.keras
       hash: md5
-      md5: 8dab01a37f5707d508aec690660f9dd6
+      md5: a3b12206370598752fc0e7184ed3fecf
       size: 24161684
   evaluate_cnn:
     cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/preprocessed/train/cnn
@@ -73,17 +74,17 @@ stages:
     deps:
     - path: data/preprocessed/test/cnn
       hash: md5
-      md5: 35f1c2d69df7e4f8547d2ebc1a13c1d6.dir
+      md5: 1640d12a37ea928fd839c2a2811e9256.dir
       size: 123530080
       nfiles: 3
     - path: data/preprocessed/train/cnn
       hash: md5
-      md5: b145449590566203c58401e002582a86.dir
-      size: 494120080
+      md5: f29f4b5a71c3b800611f997b4307c7a3.dir
+      size: 494120081
       nfiles: 3
     - path: models/cnn_model.keras
       hash: md5
-      md5: 08b52ea92373f1e0ddfe9940c501ca32
+      md5: a3b12206370598752fc0e7184ed3fecf
       size: 24161684
     params:
       params.yaml:
@@ -91,35 +92,35 @@ stages:
     outs:
     - path: dvclive/cnn/evaluation
       hash: md5
-      md5: 06f0835bf2d193fcb7fee5f234054b24.dir
-      size: 210
+      md5: cfbc9d00da80b870a2ee78c4fde9a00e.dir
+      size: 208
       nfiles: 3
   preprocess_cnn_train:
     cmd: preprocess_cnn -v -i data/splitted/train -o data/preprocessed/train/cnn
     deps:
     - path: data/splitted/train
       hash: md5
-      md5: 2646d230dcd007e5b4f669a1269364d6.dir
+      md5: 37c77b41c3911fc24c0f8ce652fcfdac.dir
       size: 125480081
       nfiles: 3
     outs:
     - path: data/preprocessed/train/cnn
       hash: md5
-      md5: 951fdf27583db4cf9d0a9ee98d35fa22.dir
-      size: 494120079
+      md5: f29f4b5a71c3b800611f997b4307c7a3.dir
+      size: 494120081
       nfiles: 3
   preprocess_cnn_test:
     cmd: preprocess_cnn -v -i data/raw/test -o data/preprocessed/test/cnn
     deps:
     - path: data/raw/test
       hash: md5
-      md5: b1162132f4ffebe1f492bf90048a2a6e.dir
+      md5: 4b23ca093e5e16053f7dd7b35fa040d4.dir
       size: 31370078
       nfiles: 3
     outs:
     - path: data/preprocessed/test/cnn
       hash: md5
-      md5: 35f1c2d69df7e4f8547d2ebc1a13c1d6.dir
+      md5: 1640d12a37ea928fd839c2a2811e9256.dir
       size: 123530080
       nfiles: 3
   preprocess_cnn_validation:
@@ -127,12 +128,12 @@ stages:
     deps:
     - path: data/splitted/validation
       hash: md5
-      md5: 3918c3ae590f5570dfde888e6db8696b.dir
-      size: 31370079
+      md5: 00e02e358e29588799d462ac59f67512.dir
+      size: 31370080
       nfiles: 3
     outs:
     - path: data/preprocessed/validation/cnn
       hash: md5
-      md5: be3917a7b33ad329399348e064ad8801.dir
+      md5: 8d20db777349b99562652eef5355483f.dir
       size: 123530080
       nfiles: 3

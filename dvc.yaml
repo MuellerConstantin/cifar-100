@@ -7,6 +7,7 @@ stages:
   split:
     cmd: split -v -i data/raw/train -t data/splitted/train -e data/splitted/validation
     params:
+    - general.seed
     - general.validation_split_ratio
     deps:
     - data/raw/train
@@ -64,6 +65,7 @@ metrics:
 - dvclive/cnn/training/metrics.json
 - dvclive/cnn/training/metrics.json
 - dvclive/cnn/training/metrics.json
+- dvclive/cnn/evaluation/metrics.json
 plots:
 - dvclive/cnn/evaluation/plots/metrics:
     x: step
@@ -80,4 +82,6 @@ plots:
 - dvclive/cnn/training/plots/metrics:
     x: step
 - dvclive/cnn/training/plots/metrics:
+    x: step
+- dvclive/cnn/evaluation/plots/metrics:
     x: step
