@@ -81,6 +81,8 @@ stages:
     params:
     - general.batch_size
     - train_resnet50.epochs
+    - train_resnet50.fine_tuning_learning_rate
+    - train_resnet50.fine_tuning_unfreezed_layer_count
     deps:
     - data/preprocessed/train/resnet50
     - data/preprocessed/validation/resnet50
@@ -102,17 +104,17 @@ stages:
 metrics:
 - dvclive/cnn/training/metrics.json
 - dvclive/cnn/evaluation/metrics.json
-- dvclive/resnet50/training/metrics.json
-- dvclive/resnet50/training/metrics.json
+- dvclive/resnet50/training/feature-extraction/metrics.json
+- dvclive/resnet50/training/fine-tuning/metrics.json
 - dvclive/resnet50/evaluation/metrics.json
 plots:
 - dvclive/cnn/training/plots/metrics:
     x: step
 - dvclive/cnn/evaluation/plots/metrics:
     x: step
-- dvclive/resnet50/training/plots/metrics:
+- dvclive/resnet50/training/feature-extraction/plots/metrics:
     x: step
-- dvclive/resnet50/training/plots/metrics:
+- dvclive/resnet50/training/fine-tuning/plots/metrics:
     x: step
 - dvclive/resnet50/evaluation/plots/metrics:
     x: step

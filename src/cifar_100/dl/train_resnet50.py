@@ -50,6 +50,8 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
 
     params = dvc.api.params_show()
     epochs = params["train_resnet50"]["epochs"]
+    fine_tuning_learning_rate = params["train_resnet50"]["fine_tuning_learning_rate"]
+    fine_tuning_unfreezed_layer_count = params["train_resnet50"]["fine_tuning_unfreezed_layer_count"]
 
     vprint(f"Training model for {epochs} epochs...")
 
@@ -59,7 +61,27 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
         restore_best_weights=True
     )
 
-    with dvclive.Live("dvclive/resnet50/training") as live:
+    # Feature extraction
+
+    with dvclive.Live("dvclive/resnet50/training/feature-extraction") as live:
+        dvclive_callback = DVCLiveCallback(live=live)
+
+        history = model.fit(train_dataset,
+                            epochs=epochs,
+                            validation_data=validation_dataset,
+                            callbacks=[dvclive_callback, early_stopping_callback])
+
+    # Fine-tuning
+
+    base_model.trainable = False
+
+    for layer in base_model.layers[-fine_tuning_unfreezed_layer_count:]:
+        layer.trainable = True
+
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=fine_tuning_learning_rate),
+                  loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+
+    with dvclive.Live("dvclive/resnet50/training/fine-tuning") as live:
         dvclive_callback = DVCLiveCallback(live=live)
 
         history = model.fit(train_dataset,
