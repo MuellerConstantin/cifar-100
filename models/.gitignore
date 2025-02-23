@@ -1,2 +1,4 @@
 /cnn_model.keras
 /cnn_history.npy
+/resnet50_model.keras
+/resnet50_history.npy

@@ -57,11 +57,62 @@ stages:
     - data/preprocessed/test/cnn
     outs:
     - dvclive/cnn/evaluation
+  preprocess_resnet50_train:
+    cmd: preprocess_resnet50 -v -i data/splitted/train -o data/preprocessed/train/resnet50
+    deps:
+    - data/splitted/train
+    outs:
+    - data/preprocessed/train/resnet50
+  preprocess_resnet50_test:
+    cmd: preprocess_resnet50 -v -i data/raw/test -o data/preprocessed/test/resnet50
+    deps:
+    - data/raw/test
+    outs:
+    - data/preprocessed/test/resnet50
+  preprocess_resnet50_validation:
+    cmd: preprocess_resnet50 -v -i data/splitted/validation -o data/preprocessed/validation/resnet50
+    deps:
+    - data/splitted/validation
+    outs:
+    - data/preprocessed/validation/resnet50
+  train_resnet50:
+    cmd: train_resnet50 -v -t data/preprocessed/train/resnet50 -e data/preprocessed/validation/resnet50
+      -o models
+    params:
+    - general.batch_size
+    - train_resnet50.epochs
+    deps:
+    - data/preprocessed/train/resnet50
+    - data/preprocessed/validation/resnet50
+    outs:
+    - models/resnet50_model.keras
+    - models/resnet50_history.npy
+    - dvclive/resnet50/training
+  evaluate_resnet50:
+    cmd: evaluate_resnet50 -v -m models/resnet50_model.keras -t data/preprocessed/train/resnet50
+      -e data/preprocessed/test/resnet50
+    params:
+    - general.batch_size
+    deps:
+    - models/resnet50_model.keras
+    - data/preprocessed/train/resnet50
+    - data/preprocessed/test/resnet50
+    outs:
+    - dvclive/resnet50/evaluation
 metrics:
 - dvclive/cnn/training/metrics.json
 - dvclive/cnn/evaluation/metrics.json
+- dvclive/resnet50/training/metrics.json
+- dvclive/resnet50/training/metrics.json
+- dvclive/resnet50/evaluation/metrics.json
 plots:
 - dvclive/cnn/training/plots/metrics:
     x: step
 - dvclive/cnn/evaluation/plots/metrics:
+    x: step
+- dvclive/resnet50/training/plots/metrics:
+    x: step
+- dvclive/resnet50/training/plots/metrics:
+    x: step
+- dvclive/resnet50/evaluation/plots/metrics:
     x: step

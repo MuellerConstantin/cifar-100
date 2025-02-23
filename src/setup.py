@@ -22,7 +22,10 @@ setup(
       "split=cifar_100.split:main",
       "preprocess_cnn=cifar_100.dl.preprocess_cnn:main",
       "train_cnn=cifar_100.dl.train_cnn:main",
-      "evaluate_cnn=cifar_100.dl.evaluate_cnn:main"
+      "evaluate_cnn=cifar_100.dl.evaluate_cnn:main",
+      "preprocess_resnet50=cifar_100.dl.preprocess_resnet50:main",
+      "train_resnet50=cifar_100.dl.train_resnet50:main",
+      "evaluate_resnet50=cifar_100.dl.evaluate_resnet50:main"
     ]
   }
 )
