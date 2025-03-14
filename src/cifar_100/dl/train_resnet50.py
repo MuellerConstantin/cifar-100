@@ -27,10 +27,12 @@ def create_model():
     )
 
     x = base_model.output
-    x = keras.layers.Flatten()(x)
-    x = keras.layers.Dense(128, activation="relu")(x)
+    x = keras.layers.GlobalAveragePooling2D()(x)
+    x = keras.layers.Dense(512, activation="relu")(x)
     x = keras.layers.Dropout(0.2)(x)
-    x = keras.layers.Dense(64, activation="relu")(x)
+    x = keras.layers.Dense(256, activation="relu")(x)
+    x = keras.layers.Dropout(0.2)(x)
+    x = keras.layers.Dense(128, activation="relu")(x)
     x = keras.layers.Dropout(0.2)(x)
     x = keras.layers.Dense(100, activation="softmax")(x)
 
@@ -61,6 +63,14 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
         restore_best_weights=True
     )
 
+    reduce_lr_callback = keras.callbacks.ReduceLROnPlateau(
+        monitor="val_loss",
+        factor=0.5,
+        patience=3,
+        min_lr=1e-6,
+        verbose=1
+    )
+
     # Feature extraction
 
     with dvclive.Live("dvclive/resnet50/training/feature-extraction") as live:
@@ -69,7 +79,7 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
         history = model.fit(train_dataset,
                             epochs=epochs,
                             validation_data=validation_dataset,
-                            callbacks=[dvclive_callback, early_stopping_callback])
+                            callbacks=[dvclive_callback, early_stopping_callback, reduce_lr_callback])
 
     # Fine-tuning
 
