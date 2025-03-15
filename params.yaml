@@ -6,6 +6,7 @@ train_cnn:
   epochs: 200
   learning_rate: 0.0005
 train_resnet50:
-  epochs: 1
+  epochs: 200
+  feature_extraction_learning_rate: 0.01
   fine_tuning_learning_rate: 0.00001
-  fine_tuning_unfreezed_layer_count: 4
+  fine_tuning_unfreezed_layer_count: 10

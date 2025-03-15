@@ -26,21 +26,14 @@ def create_model():
         input_shape=(32, 32, 3)
     )
 
+    base_model.trainable = False
+
     x = base_model.output
     x = keras.layers.GlobalAveragePooling2D()(x)
-    x = keras.layers.Dense(512, activation="relu")(x)
-    x = keras.layers.Dropout(0.2)(x)
-    x = keras.layers.Dense(256, activation="relu")(x)
-    x = keras.layers.Dropout(0.2)(x)
-    x = keras.layers.Dense(128, activation="relu")(x)
     x = keras.layers.Dropout(0.2)(x)
     x = keras.layers.Dense(100, activation="softmax")(x)
 
     model = keras.Model(inputs=base_model.input, outputs=x)
-
-    base_model.trainable = False
-
-    model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
     return model, base_model
 
@@ -52,6 +45,7 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
 
     params = dvc.api.params_show()
     epochs = params["train_resnet50"]["epochs"]
+    feature_extraction_learning_rate = params["train_resnet50"]["feature_extraction_learning_rate"]
     fine_tuning_learning_rate = params["train_resnet50"]["fine_tuning_learning_rate"]
     fine_tuning_unfreezed_layer_count = params["train_resnet50"]["fine_tuning_unfreezed_layer_count"]
 
@@ -73,6 +67,9 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
 
     # Feature extraction
 
+    model.compile(optimizer=keras.optimizers.SGD(learning_rate=feature_extraction_learning_rate, momentum=0.9),
+                  loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+
     with dvclive.Live("dvclive/resnet50/training/feature-extraction") as live:
         dvclive_callback = DVCLiveCallback(live=live)
 
@@ -88,7 +85,7 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
     for layer in base_model.layers[-fine_tuning_unfreezed_layer_count:]:
         layer.trainable = True
 
-    model.compile(optimizer=keras.optimizers.Adam(learning_rate=fine_tuning_learning_rate),
+    model.compile(optimizer=keras.optimizers.SGD(learning_rate=fine_tuning_learning_rate, momentum=0.9),
                   loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
     with dvclive.Live("dvclive/resnet50/training/fine-tuning") as live:

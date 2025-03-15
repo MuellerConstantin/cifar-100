@@ -18,6 +18,7 @@ def preprocess(dataset: tf.data.Dataset):
     """
     vprint("Preprocessing data...")
 
+    dataset = dataset.map(lambda x, y: (tf.image.resize(x, (32, 32)), y), num_parallel_calls=tf.data.AUTOTUNE)
     dataset = dataset.map(lambda x, y: (keras.applications.resnet50.preprocess_input(x), y),
                           num_parallel_calls=tf.data.AUTOTUNE)
 
