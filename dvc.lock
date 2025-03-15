@@ -197,23 +197,23 @@ stages:
     params:
       params.yaml:
         general.batch_size: 32
-        train_resnet50.epochs: 1
+        train_resnet50.epochs: 200
         train_resnet50.fine_tuning_learning_rate: 1e-05
         train_resnet50.fine_tuning_unfreezed_layer_count: 10
     outs:
     - path: dvclive/resnet50/training
       hash: md5
-      md5: d275de2e9d4de6dc449bf38d21a334fa.dir
-      size: 728
+      md5: f628add870e52fcb5c1ead8b3641caff.dir
+      size: 18215
       nfiles: 10
     - path: models/resnet50_history.npy
       hash: md5
-      md5: acf72c7e3c665c4605326409b11bb78f
-      size: 394
+      md5: a55d3ff8deee4bf300ff097edc4c31fb
+      size: 542
     - path: models/resnet50_model.keras
       hash: md5
-      md5: 83bcdf5251e8ea9c85db6d00629008b9
-      size: 114486192
+      md5: 894c9d7f05a06215cad2db6c7bdb674a
+      size: 114486543
   evaluate_resnet50:
     cmd: evaluate_resnet50 -v -m models/resnet50_model.keras -t data/preprocessed/train/resnet50
       -e data/preprocessed/test/resnet50
@@ -230,14 +230,14 @@ stages:
       nfiles: 3
     - path: models/resnet50_model.keras
       hash: md5
-      md5: 83bcdf5251e8ea9c85db6d00629008b9
-      size: 114486192
+      md5: 894c9d7f05a06215cad2db6c7bdb674a
+      size: 114486543
     params:
       params.yaml:
         general.batch_size: 32
     outs:
     - path: dvclive/resnet50/evaluation
       hash: md5
-      md5: 9205b4f8bc021e36d7ab3ada0817c872.dir
-      size: 208
+      md5: 2d13c83121d69b517d007cc5613356ba.dir
+      size: 196
       nfiles: 3
