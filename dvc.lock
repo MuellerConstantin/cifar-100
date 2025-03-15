@@ -149,8 +149,8 @@ stages:
     outs:
     - path: data/preprocessed/train/resnet50
       hash: md5
-      md5: 0d37d46bfb1f2e3f2aa416b6c8ccf5b3.dir
-      size: 125480080
+      md5: e16c0480c7d8902f771d9eaf66f88a67.dir
+      size: 494120081
       nfiles: 3
   preprocess_resnet50_test:
     cmd: preprocess_resnet50 -v -i data/raw/test -o data/preprocessed/test/resnet50
@@ -163,8 +163,8 @@ stages:
     outs:
     - path: data/preprocessed/test/resnet50
       hash: md5
-      md5: 5b3ee07e0529a1ec86dc04588bdd467a.dir
-      size: 31370079
+      md5: 8661f25e2eedfe5565d4454a63c78d86.dir
+      size: 123530079
       nfiles: 3
   preprocess_resnet50_validation:
     cmd: preprocess_resnet50 -v -i data/splitted/validation -o data/preprocessed/validation/resnet50
@@ -177,8 +177,8 @@ stages:
     outs:
     - path: data/preprocessed/validation/resnet50
       hash: md5
-      md5: 69e1f79c004fa763bd61a1c9376adfc4.dir
-      size: 31370080
+      md5: a049ca24198f3c066570543db670fe79.dir
+      size: 123530080
       nfiles: 3
   train_resnet50:
     cmd: train_resnet50 -v -t data/preprocessed/train/resnet50 -e data/preprocessed/validation/resnet50
