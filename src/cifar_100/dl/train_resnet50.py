@@ -20,18 +20,28 @@ def create_model():
     """
     vprint("Building model...")
 
+    x = keras.layers.Input(shape=(32, 32, 3))
+
+    data_augmentation = keras.Sequential([
+        keras.layers.RandomFlip("horizontal"),
+        keras.layers.RandomRotation(0.1),
+        keras.layers.RandomZoom(0.1),
+    ], name="data_augmentation")
+
+    x = data_augmentation(x)
+
     base_model = keras.applications.resnet50.ResNet50(
         weights="imagenet",
         include_top=False,
-        input_shape=(32, 32, 3)
+        input_tensor=x
     )
 
     base_model.trainable = False
 
     x = base_model.output
     x = keras.layers.GlobalAveragePooling2D()(x)
-    x = keras.layers.Dropout(0.2)(x)
-    x = keras.layers.Dense(100, activation="softmax")(x)
+    x = keras.layers.Dropout(0.4)(x)
+    x = keras.layers.Dense(100, activation="softmax", kernel_regularizer=keras.regularizers.l2(0.01))(x)
 
     model = keras.Model(inputs=base_model.input, outputs=x)
 
