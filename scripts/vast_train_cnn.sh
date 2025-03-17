@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-dvc repro --pull --force --single-item --downstream train_cnn
+dvc pull --with-deps train_cnn
+dvc repro --force --single-item train_cnn

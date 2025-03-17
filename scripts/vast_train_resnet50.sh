@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-dvc repro --pull --force --single-item --downstream train_resnet50
+dvc pull --with-deps train_resnet50
+dvc repro --force --single-item train_resnet50
