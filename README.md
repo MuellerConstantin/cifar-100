@@ -32,10 +32,10 @@ To start the training process, follow these steps:
 1. Rent a machine on Vast.ai with the desired specifications (e.g., GPU type, RAM, storage). Tensorflow and
 CUDA support is required for the training process.
 2. Clone the repository and set up the environment on the rented machine using `git clone https://github.com/MuellerConstantin/cifar-100.git`.
-3. Initialize the environment with all ist dependencies using `sh ./script/vast_init.sh`.
+3. Initialize the environment with all ist dependencies using `sh ./scripts/vast_init.sh`.
 4. Configure the storage box credentials by setting the password, required for fetching training data and
 pushing the results back to the storage box. Using this command: `dvc remote modify --local storagebox password <PASSWORD>`.
-5. Start the training process by executing the training script `sh ./script/vast_train_<MODEL>.sh`.
+5. Start the training process by executing the training script `sh ./scripts/vast_train_<MODEL>.sh`.
 
 ## License
 
