@@ -20,7 +20,7 @@ def create_model():
     """
     vprint("Building model...")
 
-    x = keras.layers.Input(shape=(224, 224, 3))
+    x = keras.layers.Input(shape=(32, 32, 3))
 
     data_augmentation = keras.Sequential([
         keras.layers.RandomFlip("horizontal"),
