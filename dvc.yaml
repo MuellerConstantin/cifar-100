@@ -1,6 +1,8 @@
 stages:
   fetch_data:
     cmd: fetch_data -v -o data/raw
+    deps:
+    - src/cifar_100/fetch_data.py
     outs:
     - data/raw/train
     - data/raw/test
@@ -11,6 +13,7 @@ stages:
     - general.validation_split_ratio
     deps:
     - data/raw/train
+    - src/cifar_100/split.py
     outs:
     - data/splitted/train
     - data/splitted/validation
@@ -18,18 +21,21 @@ stages:
     cmd: preprocess_cnn -v -i data/splitted/train -o data/preprocessed/train/cnn
     deps:
     - data/splitted/train
+    - src/cifar_100/dl/preprocess_cnn.py
     outs:
     - data/preprocessed/train/cnn
   preprocess_cnn_test:
     cmd: preprocess_cnn -v -i data/raw/test -o data/preprocessed/test/cnn
     deps:
     - data/raw/test
+    - src/cifar_100/dl/preprocess_cnn.py
     outs:
     - data/preprocessed/test/cnn
   preprocess_cnn_validation:
     cmd: preprocess_cnn -v -i data/splitted/validation -o data/preprocessed/validation/cnn
     deps:
     - data/splitted/validation
+    - src/cifar_100/dl/preprocess_cnn.py
     outs:
     - data/preprocessed/validation/cnn
   train_cnn:
@@ -42,6 +48,7 @@ stages:
     deps:
     - data/preprocessed/train/cnn
     - data/preprocessed/validation/cnn
+    - src/cifar_100/dl/train_cnn.py
     outs:
     - models/cnn_model.keras
     - models/cnn_history.npy
@@ -55,24 +62,28 @@ stages:
     - models/cnn_model.keras
     - data/preprocessed/train/cnn
     - data/preprocessed/test/cnn
+    - src/cifar_100/dl/evaluate_cnn.py
     outs:
     - dvclive/cnn/evaluation
   preprocess_resnet50_train:
     cmd: preprocess_resnet50 -v -i data/splitted/train -o data/preprocessed/train/resnet50
     deps:
     - data/splitted/train
+    - src/cifar_100/dl/preprocess_resnet50.py
     outs:
     - data/preprocessed/train/resnet50
   preprocess_resnet50_test:
     cmd: preprocess_resnet50 -v -i data/raw/test -o data/preprocessed/test/resnet50
     deps:
     - data/raw/test
+    - src/cifar_100/dl/preprocess_resnet50.py
     outs:
     - data/preprocessed/test/resnet50
   preprocess_resnet50_validation:
     cmd: preprocess_resnet50 -v -i data/splitted/validation -o data/preprocessed/validation/resnet50
     deps:
     - data/splitted/validation
+    - src/cifar_100/dl/preprocess_resnet50.py
     outs:
     - data/preprocessed/validation/resnet50
   train_resnet50:
@@ -86,6 +97,7 @@ stages:
     deps:
     - data/preprocessed/train/resnet50
     - data/preprocessed/validation/resnet50
+    - src/cifar_100/dl/train_resnet50.py
     outs:
     - models/resnet50_model.keras
     - models/resnet50_history.npy
@@ -99,6 +111,7 @@ stages:
     - models/resnet50_model.keras
     - data/preprocessed/train/resnet50
     - data/preprocessed/test/resnet50
+    - src/cifar_100/dl/evaluate_resnet50.py
     outs:
     - dvclive/resnet50/evaluation
 metrics:
