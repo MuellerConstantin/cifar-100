@@ -169,13 +169,13 @@ stages:
       nfiles: 3
     - path: src/cifar_100/dl/preprocess_resnet50.py
       hash: md5
-      md5: be6e4a534af13869b00cb541a1773a61
-      size: 2038
+      md5: 3ca144e22b211f84c5303e0a7f58d3ea
+      size: 2036
     outs:
     - path: data/preprocessed/train/resnet50
       hash: md5
-      md5: 859456dff270699877d5148ee99100f1.dir
-      size: 24087200083
+      md5: 3f31c75af6efcb54583d54ade9c000e8.dir
+      size: 494120081
       nfiles: 3
   preprocess_resnet50_test:
     cmd: preprocess_resnet50 -v -i data/raw/test -o data/preprocessed/test/resnet50
@@ -187,13 +187,13 @@ stages:
       nfiles: 3
     - path: src/cifar_100/dl/preprocess_resnet50.py
       hash: md5
-      md5: be6e4a534af13869b00cb541a1773a61
-      size: 2038
+      md5: 3ca144e22b211f84c5303e0a7f58d3ea
+      size: 2036
     outs:
     - path: data/preprocessed/test/resnet50
       hash: md5
-      md5: 31c87c777e6953c9aa94806bef9c03e4.dir
-      size: 6021800081
+      md5: 001299f8d6e41c4d8be305f9ba16f1f6.dir
+      size: 123530079
       nfiles: 3
   preprocess_resnet50_validation:
     cmd: preprocess_resnet50 -v -i data/splitted/validation -o data/preprocessed/validation/resnet50
@@ -205,13 +205,13 @@ stages:
       nfiles: 3
     - path: src/cifar_100/dl/preprocess_resnet50.py
       hash: md5
-      md5: be6e4a534af13869b00cb541a1773a61
-      size: 2038
+      md5: 3ca144e22b211f84c5303e0a7f58d3ea
+      size: 2036
     outs:
     - path: data/preprocessed/validation/resnet50
       hash: md5
-      md5: 3cf69f950a5f4254d97c6f565cc73b5b.dir
-      size: 6021800081
+      md5: b7c9169318e24fbe2b26515e90dc1fb8.dir
+      size: 123530080
       nfiles: 3
   train_resnet50:
     cmd: train_resnet50 -v -t data/preprocessed/train/resnet50 -e data/preprocessed/validation/resnet50
