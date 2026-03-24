@@ -65,69 +65,69 @@ stages:
     - src/cifar_100/dl/evaluate_cnn.py
     outs:
     - dvclive/cnn/evaluation
-  preprocess_resnet50_train:
-    cmd: preprocess_resnet50 -v -i data/splitted/train -o data/preprocessed/train/resnet50
+  preprocess_mobilenet_train:
+    cmd: preprocess_mobilenet -v -i data/splitted/train -o data/preprocessed/train/mobilenet
     deps:
     - data/splitted/train
-    - src/cifar_100/dl/preprocess_resnet50.py
+    - src/cifar_100/dl/preprocess_mobilenet.py
     outs:
-    - data/preprocessed/train/resnet50
-  preprocess_resnet50_test:
-    cmd: preprocess_resnet50 -v -i data/raw/test -o data/preprocessed/test/resnet50
+    - data/preprocessed/train/mobilenet
+  preprocess_mobilenet_test:
+    cmd: preprocess_mobilenet -v -i data/raw/test -o data/preprocessed/test/mobilenet
     deps:
     - data/raw/test
-    - src/cifar_100/dl/preprocess_resnet50.py
+    - src/cifar_100/dl/preprocess_mobilenet.py
     outs:
-    - data/preprocessed/test/resnet50
-  preprocess_resnet50_validation:
-    cmd: preprocess_resnet50 -v -i data/splitted/validation -o data/preprocessed/validation/resnet50
+    - data/preprocessed/test/mobilenet
+  preprocess_mobilenet_validation:
+    cmd: preprocess_mobilenet -v -i data/splitted/validation -o data/preprocessed/validation/mobilenet
     deps:
     - data/splitted/validation
-    - src/cifar_100/dl/preprocess_resnet50.py
+    - src/cifar_100/dl/preprocess_mobilenet.py
     outs:
-    - data/preprocessed/validation/resnet50
-  train_resnet50:
-    cmd: train_resnet50 -v -t data/preprocessed/train/resnet50 -e data/preprocessed/validation/resnet50
+    - data/preprocessed/validation/mobilenet
+  train_mobilenet:
+    cmd: train_mobilenet -v -t data/preprocessed/train/mobilenet -e data/preprocessed/validation/mobilenet
       -o models
     params:
     - general.batch_size
-    - train_resnet50.epochs
-    - train_resnet50.fine_tuning_learning_rate
-    - train_resnet50.fine_tuning_unfreezed_layer_count
+    - train_mobilenet.epochs
+    - train_mobilenet.fine_tuning_learning_rate
+    - train_mobilenet.fine_tuning_unfreezed_layer_count
     deps:
-    - data/preprocessed/train/resnet50
-    - data/preprocessed/validation/resnet50
-    - src/cifar_100/dl/train_resnet50.py
+    - data/preprocessed/train/mobilenet
+    - data/preprocessed/validation/mobilenet
+    - src/cifar_100/dl/train_mobilenet.py
     outs:
-    - models/resnet50_model.keras
-    - models/resnet50_history.npy
-    - dvclive/resnet50/training
-  evaluate_resnet50:
-    cmd: evaluate_resnet50 -v -m models/resnet50_model.keras -t data/preprocessed/train/resnet50
-      -e data/preprocessed/test/resnet50
+    - models/mobilenet_model.keras
+    - models/mobilenet_history.npy
+    - dvclive/mobilenet/training
+  evaluate_mobilenet:
+    cmd: evaluate_mobilenet -v -m models/mobilenet_model.keras -t data/preprocessed/train/mobilenet
+      -e data/preprocessed/test/mobilenet
     params:
     - general.batch_size
     deps:
-    - models/resnet50_model.keras
-    - data/preprocessed/train/resnet50
-    - data/preprocessed/test/resnet50
-    - src/cifar_100/dl/evaluate_resnet50.py
+    - models/mobilenet_model.keras
+    - data/preprocessed/train/mobilenet
+    - data/preprocessed/test/mobilenet
+    - src/cifar_100/dl/evaluate_mobilenet.py
     outs:
-    - dvclive/resnet50/evaluation
+    - dvclive/mobilenet/evaluation
 metrics:
 - dvclive/cnn/training/metrics.json
 - dvclive/cnn/evaluation/metrics.json
-- dvclive/resnet50/training/feature-extraction/metrics.json
-- dvclive/resnet50/training/fine-tuning/metrics.json
-- dvclive/resnet50/evaluation/metrics.json
+- dvclive/mobilenet/training/feature-extraction/metrics.json
+- dvclive/mobilenet/training/fine-tuning/metrics.json
+- dvclive/mobilenet/evaluation/metrics.json
 plots:
 - dvclive/cnn/training/plots/metrics:
     x: step
 - dvclive/cnn/evaluation/plots/metrics:
     x: step
-- dvclive/resnet50/training/feature-extraction/plots/metrics:
+- dvclive/mobilenet/training/feature-extraction/plots/metrics:
     x: step
-- dvclive/resnet50/training/fine-tuning/plots/metrics:
+- dvclive/mobilenet/training/fine-tuning/plots/metrics:
     x: step
-- dvclive/resnet50/evaluation/plots/metrics:
+- dvclive/mobilenet/evaluation/plots/metrics:
     x: step

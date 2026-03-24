@@ -274,3 +274,57 @@ stages:
       md5: 2d13c83121d69b517d007cc5613356ba.dir
       size: 196
       nfiles: 3
+  preprocess_mobilenet_test:
+    cmd: preprocess_mobilenet -v -i data/raw/test -o data/preprocessed/test/mobilenet
+    deps:
+    - path: data/raw/test
+      hash: md5
+      md5: ee2dfdd656a348ac948a7a26658ddab1.dir
+      size: 31370079
+      nfiles: 3
+    - path: src/cifar_100/dl/preprocess_mobilenet.py
+      hash: md5
+      md5: 9ded668c64b81e88c76607ca52944a05
+      size: 2045
+    outs:
+    - path: data/preprocessed/test/mobilenet
+      hash: md5
+      md5: 41cefaf51070e259f237b3d059720ee1.dir
+      size: 123530079
+      nfiles: 3
+  preprocess_mobilenet_train:
+    cmd: preprocess_mobilenet -v -i data/splitted/train -o data/preprocessed/train/mobilenet
+    deps:
+    - path: data/splitted/train
+      hash: md5
+      md5: aa433ebbc597e90168f96fd0f24fbc35.dir
+      size: 125480081
+      nfiles: 3
+    - path: src/cifar_100/dl/preprocess_mobilenet.py
+      hash: md5
+      md5: 9ded668c64b81e88c76607ca52944a05
+      size: 2045
+    outs:
+    - path: data/preprocessed/train/mobilenet
+      hash: md5
+      md5: bfc3a7d5fba18f546480346738c2481b.dir
+      size: 494120080
+      nfiles: 3
+  preprocess_mobilenet_validation:
+    cmd: preprocess_mobilenet -v -i data/splitted/validation -o data/preprocessed/validation/mobilenet
+    deps:
+    - path: data/splitted/validation
+      hash: md5
+      md5: ab5a48eea8320c4883a33cd4fc71fbb1.dir
+      size: 31370080
+      nfiles: 3
+    - path: src/cifar_100/dl/preprocess_mobilenet.py
+      hash: md5
+      md5: 9ded668c64b81e88c76607ca52944a05
+      size: 2045
+    outs:
+    - path: data/preprocessed/validation/mobilenet
+      hash: md5
+      md5: 09558b167a5e48200249b54134d6677e.dir
+      size: 123530080
+      nfiles: 3

@@ -1,5 +1,5 @@
 """
-Module for preprocessing data for a tranfer learning trained ResNet50 model.
+Module for preprocessing data for a tranfer learning trained MobileNet model.
 """
 
 import argparse
@@ -11,7 +11,7 @@ vprint = lambda *a, **k: None
 
 def preprocess(dataset: tf.data.Dataset):
     """
-    Preprocesses data for a tranfer learning trained ResNet50 model.
+    Preprocesses data for a tranfer learning trained MobileNet model.
 
     This function expects a dataset of images and labels, and returns a
     preprocessed dataset of images and labels.
@@ -19,18 +19,18 @@ def preprocess(dataset: tf.data.Dataset):
     vprint("Preprocessing data...")
 
     dataset = dataset.map(lambda x, y: (tf.image.resize(x, (32, 32)), y), num_parallel_calls=tf.data.AUTOTUNE)
-    dataset = dataset.map(lambda x, y: (keras.applications.resnet50.preprocess_input(x), y),
+    dataset = dataset.map(lambda x, y: (keras.applications.mobilenet_v2.preprocess_input(x), y),
                           num_parallel_calls=tf.data.AUTOTUNE)
 
     return dataset
 
 def main():
     """
-    Entry point for preprocessing data for a tranfer learning trained ResNet50 model.
+    Entry point for preprocessing data for a tranfer learning trained MobileNet model.
     """
-    parser = argparse.ArgumentParser(prog="preprocess_resnet50.py",
+    parser = argparse.ArgumentParser(prog="preprocess_mobilenet.py",
                                     formatter_class=argparse.RawTextHelpFormatter,
-                                    description="Preprocesses data for a tranfer learning trained ResNet50 model.")
+                                    description="Preprocesses data for a tranfer learning trained MobileNet model.")
 
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Print out verbose messages.")

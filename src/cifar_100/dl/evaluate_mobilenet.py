@@ -1,5 +1,5 @@
 """
-Module for evaluating a transfer learning trained ResNet50 model.
+Module for evaluating a transfer learning trained MobileNet model.
 """
 
 import argparse
@@ -20,7 +20,7 @@ def evaluate(model, train_dataset: tf.data.Dataset, test_dataset: tf.data.Datase
     train_accuracy = model.evaluate(train_dataset, verbose=2)
     test_accuracy = model.evaluate(test_dataset, verbose=2)
 
-    with dvclive.Live("dvclive/resnet50/evaluation") as live:
+    with dvclive.Live("dvclive/mobilenet/evaluation") as live:
         live.log_metric("train/accuracy", train_accuracy[1])
         live.log_metric("test/accuracy", test_accuracy[1])
 
@@ -28,9 +28,9 @@ def main():
     """
     Entry point for evaluating a trained model.
     """
-    parser = argparse.ArgumentParser(prog="evaluate_resnet50.py",
+    parser = argparse.ArgumentParser(prog="evaluate_mobilenet.py",
                                     formatter_class=argparse.RawTextHelpFormatter,
-                                    description="Evaluate a transfer learning trained ResNet50 model.")
+                                    description="Evaluate a transfer learning trained MobileNet model.")
 
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Print out verbose messages.")

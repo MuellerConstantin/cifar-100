@@ -1,5 +1,5 @@
 """
-Module for training a tranfer learning trained ResNet50 model.
+Module for training a tranfer learning trained MobileNet model.
 """
 
 import os
@@ -20,7 +20,7 @@ def create_model():
     """
     vprint("Building model...")
 
-    x = keras.layers.Input(shape=(32, 32, 3))
+    inputs = keras.layers.Input(shape=(32, 32, 3))
 
     data_augmentation = keras.Sequential([
         keras.layers.RandomFlip("horizontal"),
@@ -29,22 +29,23 @@ def create_model():
         keras.layers.RandomContrast(0.1)
     ], name="data_augmentation")
 
-    x = data_augmentation(x)
+    x = data_augmentation(inputs)
 
-    base_model = keras.applications.resnet50.ResNet50(
+    base_model = keras.applications.mobilenet_v2.MobileNetV2(
         weights="imagenet",
         include_top=False,
-        input_tensor=x
+        input_tensor=x,
+        alpha=0.75
     )
 
     base_model.trainable = False
 
     x = base_model.output
     x = keras.layers.GlobalAveragePooling2D()(x)
-    x = keras.layers.Dropout(0.4)(x)
+    x = keras.layers.Dropout(0.3)(x)
     x = keras.layers.Dense(100, activation="softmax", kernel_regularizer=keras.regularizers.l2(1e-4))(x)
 
-    model = keras.Model(inputs=base_model.input, outputs=x)
+    model = keras.Model(inputs=inputs, outputs=x)
 
     return model, base_model
 
@@ -55,10 +56,10 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
     model, base_model = create_model()
 
     params = dvc.api.params_show()
-    epochs = params["train_resnet50"]["epochs"]
-    feature_extraction_learning_rate = params["train_resnet50"]["feature_extraction_learning_rate"]
-    fine_tuning_learning_rate = params["train_resnet50"]["fine_tuning_learning_rate"]
-    fine_tuning_unfreezed_layer_count = params["train_resnet50"]["fine_tuning_unfreezed_layer_count"]
+    epochs = params["train_mobilenet"]["epochs"]
+    feature_extraction_learning_rate = params["train_mobilenet"]["feature_extraction_learning_rate"]
+    fine_tuning_learning_rate = params["train_mobilenet"]["fine_tuning_learning_rate"]
+    fine_tuning_unfreezed_layer_count = params["train_mobilenet"]["fine_tuning_unfreezed_layer_count"]
 
     vprint(f"Training model for {epochs} epochs...")
 
@@ -81,7 +82,7 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
     model.compile(optimizer=keras.optimizers.Adam(learning_rate=feature_extraction_learning_rate),
                   loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
-    with dvclive.Live("dvclive/resnet50/training/feature-extraction") as live:
+    with dvclive.Live("dvclive/mobilenet/training/feature-extraction") as live:
         dvclive_callback = DVCLiveCallback(live=live)
 
         history = model.fit(train_dataset,
@@ -93,13 +94,17 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
 
     base_model.trainable = True
 
-    for layer in base_model.layers[:-fine_tuning_unfreezed_layer_count]:
+    for layer in base_model.layers:
         layer.trainable = False
+
+    for layer in base_model.layers[-fine_tuning_unfreezed_layer_count:]:
+        if not isinstance(layer, keras.layers.BatchNormalization):
+            layer.trainable = True
 
     model.compile(optimizer=keras.optimizers.Adam(learning_rate=fine_tuning_learning_rate),
                   loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
-    with dvclive.Live("dvclive/resnet50/training/fine-tuning") as live:
+    with dvclive.Live("dvclive/mobilenet/training/fine-tuning") as live:
         dvclive_callback = DVCLiveCallback(live=live)
 
         history = model.fit(train_dataset,
@@ -110,9 +115,9 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
     return model, history
 
 def main():
-    parser = argparse.ArgumentParser(prog="train_resnet50.py",
+    parser = argparse.ArgumentParser(prog="train_mobilenet.py",
                                     formatter_class=argparse.RawTextHelpFormatter,
-                                    description="Trains a tranfer learning trained ResNet50 model.")
+                                    description="Trains a tranfer learning trained MobileNet model.")
 
     parser.add_argument("-v", "--verbose", action="store_true",
                         help="Print out verbose messages.")
@@ -146,11 +151,11 @@ def main():
 
     vprint("Saving model...")
 
-    model.save(os.path.join(args.output, "resnet50_model.keras"))
+    model.save(os.path.join(args.output, "mobilenet_model.keras"))
 
     vprint("Saving history...")
 
-    np.save(os.path.join(args.output, "resnet50_history.npy"), history.history)
+    np.save(os.path.join(args.output, "mobilenet_history.npy"), history.history)
 
 if __name__ == "__main__":
     main()
