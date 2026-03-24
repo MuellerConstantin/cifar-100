@@ -2,3 +2,5 @@
 /cnn_history.npy
 /resnet50_model.keras
 /resnet50_history.npy
+/mobilenet_model.keras
+/mobilenet_history.npy

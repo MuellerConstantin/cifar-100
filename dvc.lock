@@ -19,7 +19,8 @@ stages:
       size: 156850081
       nfiles: 3
   split:
-    cmd: split -v -i data/raw/train -t data/splitted/train -e data/splitted/validation
+    cmd: split -v -i data/raw/train -t data/splitted/train -e 
+      data/splitted/validation
     deps:
     - path: data/raw/train
       hash: md5
@@ -46,8 +47,8 @@ stages:
       size: 31370080
       nfiles: 3
   train_cnn:
-    cmd: train_cnn -v -t data/preprocessed/train/cnn -e data/preprocessed/validation/cnn
-      -o models
+    cmd: train_cnn -v -t data/preprocessed/train/cnn -e 
+      data/preprocessed/validation/cnn -o models
     deps:
     - path: data/preprocessed/train/cnn
       hash: md5
@@ -79,8 +80,8 @@ stages:
       md5: 17baff139da3992a25bfe3ac24f5e820
       size: 17093669
   evaluate_cnn:
-    cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/preprocessed/train/cnn
-      -e data/preprocessed/test/cnn
+    cmd: evaluate_cnn -v -m models/cnn_model.keras -t 
+      data/preprocessed/train/cnn -e data/preprocessed/test/cnn
     deps:
     - path: data/preprocessed/test/cnn
       hash: md5
@@ -142,7 +143,8 @@ stages:
       size: 123530078
       nfiles: 3
   preprocess_cnn_validation:
-    cmd: preprocess_cnn -v -i data/splitted/validation -o data/preprocessed/validation/cnn
+    cmd: preprocess_cnn -v -i data/splitted/validation -o 
+      data/preprocessed/validation/cnn
     deps:
     - path: data/splitted/validation
       hash: md5
@@ -160,7 +162,8 @@ stages:
       size: 123530080
       nfiles: 3
   preprocess_resnet50_train:
-    cmd: preprocess_resnet50 -v -i data/splitted/train -o data/preprocessed/train/resnet50
+    cmd: preprocess_resnet50 -v -i data/splitted/train -o 
+      data/preprocessed/train/resnet50
     deps:
     - path: data/splitted/train
       hash: md5
@@ -178,7 +181,8 @@ stages:
       size: 494120081
       nfiles: 3
   preprocess_resnet50_test:
-    cmd: preprocess_resnet50 -v -i data/raw/test -o data/preprocessed/test/resnet50
+    cmd: preprocess_resnet50 -v -i data/raw/test -o 
+      data/preprocessed/test/resnet50
     deps:
     - path: data/raw/test
       hash: md5
@@ -196,7 +200,8 @@ stages:
       size: 123530079
       nfiles: 3
   preprocess_resnet50_validation:
-    cmd: preprocess_resnet50 -v -i data/splitted/validation -o data/preprocessed/validation/resnet50
+    cmd: preprocess_resnet50 -v -i data/splitted/validation -o 
+      data/preprocessed/validation/resnet50
     deps:
     - path: data/splitted/validation
       hash: md5
@@ -214,8 +219,8 @@ stages:
       size: 123530080
       nfiles: 3
   train_resnet50:
-    cmd: train_resnet50 -v -t data/preprocessed/train/resnet50 -e data/preprocessed/validation/resnet50
-      -o models
+    cmd: train_resnet50 -v -t data/preprocessed/train/resnet50 -e 
+      data/preprocessed/validation/resnet50 -o models
     deps:
     - path: data/preprocessed/train/resnet50
       hash: md5
@@ -248,8 +253,8 @@ stages:
       md5: 894c9d7f05a06215cad2db6c7bdb674a
       size: 114486543
   evaluate_resnet50:
-    cmd: evaluate_resnet50 -v -m models/resnet50_model.keras -t data/preprocessed/train/resnet50
-      -e data/preprocessed/test/resnet50
+    cmd: evaluate_resnet50 -v -m models/resnet50_model.keras -t 
+      data/preprocessed/train/resnet50 -e data/preprocessed/test/resnet50
     deps:
     - path: data/preprocessed/test/resnet50
       hash: md5
@@ -275,7 +280,8 @@ stages:
       size: 196
       nfiles: 3
   preprocess_mobilenet_test:
-    cmd: preprocess_mobilenet -v -i data/raw/test -o data/preprocessed/test/mobilenet
+    cmd: preprocess_mobilenet -v -i data/raw/test -o 
+      data/preprocessed/test/mobilenet
     deps:
     - path: data/raw/test
       hash: md5
@@ -293,7 +299,8 @@ stages:
       size: 123530079
       nfiles: 3
   preprocess_mobilenet_train:
-    cmd: preprocess_mobilenet -v -i data/splitted/train -o data/preprocessed/train/mobilenet
+    cmd: preprocess_mobilenet -v -i data/splitted/train -o 
+      data/preprocessed/train/mobilenet
     deps:
     - path: data/splitted/train
       hash: md5
@@ -311,7 +318,8 @@ stages:
       size: 494120080
       nfiles: 3
   preprocess_mobilenet_validation:
-    cmd: preprocess_mobilenet -v -i data/splitted/validation -o data/preprocessed/validation/mobilenet
+    cmd: preprocess_mobilenet -v -i data/splitted/validation -o 
+      data/preprocessed/validation/mobilenet
     deps:
     - path: data/splitted/validation
       hash: md5
@@ -328,3 +336,41 @@ stages:
       md5: 09558b167a5e48200249b54134d6677e.dir
       size: 123530080
       nfiles: 3
+  train_mobilenet:
+    cmd: train_mobilenet -v -t data/preprocessed/train/mobilenet -e 
+      data/preprocessed/validation/mobilenet -o models
+    deps:
+    - path: data/preprocessed/train/mobilenet
+      hash: md5
+      md5: bfc3a7d5fba18f546480346738c2481b.dir
+      size: 494120080
+      nfiles: 3
+    - path: data/preprocessed/validation/mobilenet
+      hash: md5
+      md5: 09558b167a5e48200249b54134d6677e.dir
+      size: 123530080
+      nfiles: 3
+    - path: src/cifar_100/dl/train_mobilenet.py
+      hash: md5
+      md5: 9e22f58591456b75778ded7b4b775b5b
+      size: 5355
+    params:
+      params.yaml:
+        general.batch_size: 32
+        train_mobilenet.epochs: 100
+        train_mobilenet.fine_tuning_learning_rate: 1e-05
+        train_mobilenet.fine_tuning_unfreezed_layer_count: 30
+    outs:
+    - path: dvclive/mobilenet/training
+      hash: md5
+      md5: 812230f22611d154dc5b68f315351f78.dir
+      size: 6960
+      nfiles: 10
+    - path: models/mobilenet_history.npy
+      hash: md5
+      md5: c1e416d385dd3941599ebc1001973c2c
+      size: 2414
+    - path: models/mobilenet_model.keras
+      hash: md5
+      md5: 0d51e37a808d088f61565401318502ce
+      size: 15099098

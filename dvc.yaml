@@ -7,7 +7,8 @@ stages:
     - data/raw/train
     - data/raw/test
   split:
-    cmd: split -v -i data/raw/train -t data/splitted/train -e data/splitted/validation
+    cmd: split -v -i data/raw/train -t data/splitted/train -e 
+      data/splitted/validation
     params:
     - general.seed
     - general.validation_split_ratio
@@ -32,15 +33,16 @@ stages:
     outs:
     - data/preprocessed/test/cnn
   preprocess_cnn_validation:
-    cmd: preprocess_cnn -v -i data/splitted/validation -o data/preprocessed/validation/cnn
+    cmd: preprocess_cnn -v -i data/splitted/validation -o 
+      data/preprocessed/validation/cnn
     deps:
     - data/splitted/validation
     - src/cifar_100/dl/preprocess_cnn.py
     outs:
     - data/preprocessed/validation/cnn
   train_cnn:
-    cmd: train_cnn -v -t data/preprocessed/train/cnn -e data/preprocessed/validation/cnn
-      -o models
+    cmd: train_cnn -v -t data/preprocessed/train/cnn -e 
+      data/preprocessed/validation/cnn -o models
     params:
     - general.batch_size
     - train_cnn.epochs
@@ -54,8 +56,8 @@ stages:
     - models/cnn_history.npy
     - dvclive/cnn/training
   evaluate_cnn:
-    cmd: evaluate_cnn -v -m models/cnn_model.keras -t data/preprocessed/train/cnn
-      -e data/preprocessed/test/cnn
+    cmd: evaluate_cnn -v -m models/cnn_model.keras -t 
+      data/preprocessed/train/cnn -e data/preprocessed/test/cnn
     params:
     - general.batch_size
     deps:
@@ -66,29 +68,32 @@ stages:
     outs:
     - dvclive/cnn/evaluation
   preprocess_mobilenet_train:
-    cmd: preprocess_mobilenet -v -i data/splitted/train -o data/preprocessed/train/mobilenet
+    cmd: preprocess_mobilenet -v -i data/splitted/train -o 
+      data/preprocessed/train/mobilenet
     deps:
     - data/splitted/train
     - src/cifar_100/dl/preprocess_mobilenet.py
     outs:
     - data/preprocessed/train/mobilenet
   preprocess_mobilenet_test:
-    cmd: preprocess_mobilenet -v -i data/raw/test -o data/preprocessed/test/mobilenet
+    cmd: preprocess_mobilenet -v -i data/raw/test -o 
+      data/preprocessed/test/mobilenet
     deps:
     - data/raw/test
     - src/cifar_100/dl/preprocess_mobilenet.py
     outs:
     - data/preprocessed/test/mobilenet
   preprocess_mobilenet_validation:
-    cmd: preprocess_mobilenet -v -i data/splitted/validation -o data/preprocessed/validation/mobilenet
+    cmd: preprocess_mobilenet -v -i data/splitted/validation -o 
+      data/preprocessed/validation/mobilenet
     deps:
     - data/splitted/validation
     - src/cifar_100/dl/preprocess_mobilenet.py
     outs:
     - data/preprocessed/validation/mobilenet
   train_mobilenet:
-    cmd: train_mobilenet -v -t data/preprocessed/train/mobilenet -e data/preprocessed/validation/mobilenet
-      -o models
+    cmd: train_mobilenet -v -t data/preprocessed/train/mobilenet -e 
+      data/preprocessed/validation/mobilenet -o models
     params:
     - general.batch_size
     - train_mobilenet.epochs
@@ -103,8 +108,8 @@ stages:
     - models/mobilenet_history.npy
     - dvclive/mobilenet/training
   evaluate_mobilenet:
-    cmd: evaluate_mobilenet -v -m models/mobilenet_model.keras -t data/preprocessed/train/mobilenet
-      -e data/preprocessed/test/mobilenet
+    cmd: evaluate_mobilenet -v -m models/mobilenet_model.keras -t 
+      data/preprocessed/train/mobilenet -e data/preprocessed/test/mobilenet
     params:
     - general.batch_size
     deps:
@@ -117,17 +122,17 @@ stages:
 metrics:
 - dvclive/cnn/training/metrics.json
 - dvclive/cnn/evaluation/metrics.json
+- dvclive/mobilenet/evaluation/metrics.json
 - dvclive/mobilenet/training/feature-extraction/metrics.json
 - dvclive/mobilenet/training/fine-tuning/metrics.json
-- dvclive/mobilenet/evaluation/metrics.json
 plots:
 - dvclive/cnn/training/plots/metrics:
     x: step
 - dvclive/cnn/evaluation/plots/metrics:
     x: step
+- dvclive/mobilenet/evaluation/plots/metrics:
+    x: step
 - dvclive/mobilenet/training/feature-extraction/plots/metrics:
     x: step
 - dvclive/mobilenet/training/fine-tuning/plots/metrics:
-    x: step
-- dvclive/mobilenet/evaluation/plots/metrics:
     x: step
