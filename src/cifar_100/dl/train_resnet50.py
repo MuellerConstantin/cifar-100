@@ -20,12 +20,13 @@ def create_model():
     """
     vprint("Building model...")
 
-    x = keras.layers.Input(shape=(32, 32, 3))
+    x = keras.layers.Input(shape=(224, 224, 3))
 
     data_augmentation = keras.Sequential([
         keras.layers.RandomFlip("horizontal"),
         keras.layers.RandomRotation(0.1),
         keras.layers.RandomZoom(0.1),
+        keras.layers.RandomContrast(0.1)
     ], name="data_augmentation")
 
     x = data_augmentation(x)
@@ -41,7 +42,7 @@ def create_model():
     x = base_model.output
     x = keras.layers.GlobalAveragePooling2D()(x)
     x = keras.layers.Dropout(0.4)(x)
-    x = keras.layers.Dense(100, activation="softmax", kernel_regularizer=keras.regularizers.l2(0.01))(x)
+    x = keras.layers.Dense(100, activation="softmax", kernel_regularizer=keras.regularizers.l2(1e-4))(x)
 
     model = keras.Model(inputs=base_model.input, outputs=x)
 
@@ -77,7 +78,7 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
 
     # Feature extraction
 
-    model.compile(optimizer=keras.optimizers.SGD(learning_rate=feature_extraction_learning_rate, momentum=0.9),
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=feature_extraction_learning_rate),
                   loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
     with dvclive.Live("dvclive/resnet50/training/feature-extraction") as live:
@@ -90,12 +91,12 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
 
     # Fine-tuning
 
-    base_model.trainable = False
+    base_model.trainable = True
 
-    for layer in base_model.layers[-fine_tuning_unfreezed_layer_count:]:
-        layer.trainable = True
+    for layer in base_model.layers[:-fine_tuning_unfreezed_layer_count]:
+        layer.trainable = False
 
-    model.compile(optimizer=keras.optimizers.SGD(learning_rate=fine_tuning_learning_rate, momentum=0.9),
+    model.compile(optimizer=keras.optimizers.Adam(learning_rate=fine_tuning_learning_rate),
                   loss="sparse_categorical_crossentropy", metrics=["accuracy"])
 
     with dvclive.Live("dvclive/resnet50/training/fine-tuning") as live:
