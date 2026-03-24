@@ -20,34 +20,48 @@ def create_model():
     """
     vprint("Building model...")
 
+    weight_decay = 1e-4
+
     model = keras.Sequential([
-        keras.layers.Input(shape=((32, 32, 3))),
+        keras.layers.Input(shape=(32, 32, 3)),
 
         keras.layers.RandomFlip("horizontal"),
-        keras.layers.RandomRotation(0.2),
+        keras.layers.RandomRotation(0.1),
+        keras.layers.RandomZoom(0.1),
+        keras.layers.RandomContrast(0.1),
 
-        keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu"),
+        keras.layers.Conv2D(32, 3, padding="same", use_bias=False,
+                            kernel_regularizer=keras.regularizers.l2(weight_decay)),
         keras.layers.BatchNormalization(),
-        keras.layers.Conv2D(64, (3, 3), padding="same", activation="relu"),
+        keras.layers.Activation("relu"),
+        keras.layers.Conv2D(32, 3, padding="same", use_bias=False,
+                            kernel_regularizer=keras.regularizers.l2(weight_decay)),
         keras.layers.BatchNormalization(),
-        keras.layers.MaxPooling2D((2, 2)),
+        keras.layers.Activation("relu"),
+        keras.layers.MaxPooling2D(),
 
-        keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu"),
+        keras.layers.Conv2D(64, 3, padding="same", use_bias=False,
+                            kernel_regularizer=keras.regularizers.l2(weight_decay)),
         keras.layers.BatchNormalization(),
-        keras.layers.Conv2D(128, (3, 3), padding="same", activation="relu"),
+        keras.layers.Activation("relu"),
+        keras.layers.Conv2D(64, 3, padding="same", use_bias=False,
+                            kernel_regularizer=keras.regularizers.l2(weight_decay)),
         keras.layers.BatchNormalization(),
-        keras.layers.MaxPooling2D((2, 2)),
+        keras.layers.Activation("relu"),
+        keras.layers.MaxPooling2D(),
 
-        keras.layers.Conv2D(256, (3, 3), padding="same", activation="relu"),
+        keras.layers.Conv2D(128, 3, padding="same", use_bias=False,
+                            kernel_regularizer=keras.regularizers.l2(weight_decay)),
         keras.layers.BatchNormalization(),
-        keras.layers.Conv2D(256, (3, 3), padding="same", activation="relu"),
+        keras.layers.Activation("relu"),
+        keras.layers.Conv2D(128, 3, padding="same", use_bias=False,
+                            kernel_regularizer=keras.regularizers.l2(weight_decay)),
         keras.layers.BatchNormalization(),
-        keras.layers.MaxPooling2D((2, 2)),
+        keras.layers.Activation("relu"),
 
-        keras.layers.Flatten(),
-        keras.layers.Dropout(0.2),
-        keras.layers.Dense(64, activation="relu"),
-        keras.layers.Dropout(0.2),
+        keras.layers.GlobalAveragePooling2D(),
+        keras.layers.Dense(128, activation="relu"),
+        keras.layers.Dropout(0.3),
         keras.layers.Dense(100, activation="softmax")
     ])
 
