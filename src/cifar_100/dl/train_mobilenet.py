@@ -30,6 +30,7 @@ def create_model():
     ], name="data_augmentation")
 
     x = data_augmentation(inputs)
+    x = keras.layers.Resizing(96, 96)(x)
 
     base_model = keras.applications.mobilenet_v2.MobileNetV2(
         weights="imagenet",
@@ -94,7 +95,7 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
 
     base_model.trainable = True
 
-    for layer in base_model.layers:
+    for layer in base_model.layers[:-fine_tuning_unfreezed_layer_count]:
         layer.trainable = False
 
     for layer in base_model.layers[-fine_tuning_unfreezed_layer_count:]:
