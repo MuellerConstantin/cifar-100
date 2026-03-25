@@ -27,6 +27,16 @@ dev = [
   "dvclive"
 ]
 
+[project.scripts]
+fetch_data = "cifar_100.fetch_data:main"
+split = "cifar_100.split:main"
+preprocess_cnn = "cifar_100.dl.preprocess_cnn:main"
+train_cnn = "cifar_100.dl.train_cnn:main"
+evaluate_cnn = "cifar_100.dl.evaluate_cnn:main"
+preprocess_mobilenet = "cifar_100.dl.preprocess_mobilenet:main"
+train_mobilenet = "cifar_100.dl.train_mobilenet:main"
+evaluate_mobilenet = "cifar_100.dl.evaluate_mobilenet:main"
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
