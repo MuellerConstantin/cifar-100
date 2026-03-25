@@ -96,7 +96,9 @@ stages:
       data/preprocessed/validation/mobilenet -o models
     params:
     - general.batch_size
-    - train_mobilenet.epochs
+    - train_mobilenet.feature_extraction_epochs
+    - train_mobilenet.feature_extraction_learning_rate
+    - train_mobilenet.fine_tuning_epochs
     - train_mobilenet.fine_tuning_learning_rate
     - train_mobilenet.fine_tuning_unfreezed_layer_count
     deps:

@@ -57,26 +57,33 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
     model, base_model = create_model()
 
     params = dvc.api.params_show()
-    epochs = params["train_mobilenet"]["epochs"]
+    feature_extraction_epochs = params["train_mobilenet"]["feature_extraction_epochs"]
     feature_extraction_learning_rate = params["train_mobilenet"]["feature_extraction_learning_rate"]
+    fine_tuning_epochs = params["train_mobilenet"]["fine_tuning_epochs"]
     fine_tuning_learning_rate = params["train_mobilenet"]["fine_tuning_learning_rate"]
     fine_tuning_unfreezed_layer_count = params["train_mobilenet"]["fine_tuning_unfreezed_layer_count"]
 
-    vprint(f"Training model for {epochs} epochs...")
-
-    early_stopping_callback = keras.callbacks.EarlyStopping(
+    feature_extraction_early_stopping = keras.callbacks.EarlyStopping(
         monitor="val_loss",
         patience=5,
         restore_best_weights=True
     )
 
-    reduce_lr_callback = keras.callbacks.ReduceLROnPlateau(
+    fine_tuning_early_stopping = keras.callbacks.EarlyStopping(
+        monitor="val_loss",
+        patience=5,
+        restore_best_weights=True
+    )
+
+    fine_tuning_reduce_lr = keras.callbacks.ReduceLROnPlateau(
         monitor="val_loss",
         factor=0.5,
         patience=3,
         min_lr=1e-6,
         verbose=1
     )
+
+    vprint(f"Training model for {feature_extraction_epochs} feature extraction epochs...")
 
     # Feature extraction
 
@@ -87,9 +94,11 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
         dvclive_callback = DVCLiveCallback(live=live)
 
         history = model.fit(train_dataset,
-                            epochs=epochs,
+                            epochs=feature_extraction_epochs,
                             validation_data=validation_dataset,
-                            callbacks=[dvclive_callback, early_stopping_callback, reduce_lr_callback])
+                            callbacks=[dvclive_callback, feature_extraction_early_stopping])
+
+    vprint(f"Training model for {fine_tuning_epochs} fine-tuning epochs...")
 
     # Fine-tuning
 
@@ -109,9 +118,9 @@ def train_model(train_dataset: tf.data.Dataset, validation_dataset: tf.data.Data
         dvclive_callback = DVCLiveCallback(live=live)
 
         history = model.fit(train_dataset,
-                            epochs=epochs,
+                            epochs=fine_tuning_epochs,
                             validation_data=validation_dataset,
-                            callbacks=[dvclive_callback, early_stopping_callback])
+                            callbacks=[dvclive_callback, fine_tuning_early_stopping, fine_tuning_reduce_lr])
 
     return model, history
 
