@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cifar-100"
+version = "0.1.0"
+description = "An E-Mail Inbox sorting and classification tool."
+requires-python = ">=3.10"
+
+dependencies = [
+  "numpy",
+  "pandas",
+  "tqdm",
+  "keras==3.5.0",
+  "tensorflow==2.16.1"
+]
+
+[project.optional-dependencies]
+dev = [
+  "jupyter",
+  "ipykernel",
+  "matplotlib",
+  "pylint",
+  "dvc",
+  "dvc-ssh",
+  "dvclive"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["cifar_100*"]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.report]
+output-format = "colorized"

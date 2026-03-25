@@ -3,7 +3,10 @@
     "editor.insertSpaces": true,
     "files.eol": "\n",
     "files.exclude": {
-        "**/__pycache__": true
+        "**/__pycache__": true,
+        "**/.git": true,
+        "**/.pytest_cache": true,
+        "**/*.egg-info": true,
     },
     "python-envs.defaultEnvManager": "ms-python.python:conda",
     "python-envs.defaultPackageManager": "ms-python.python:conda"
